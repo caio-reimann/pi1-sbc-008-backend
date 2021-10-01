@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+flask-security-too = "*"
+flask-restful = "*"
+flask-jwt-extended = "*"
+marshmallow = "*"
+python-dotenv = "*"
+flask-bcrypt = "*"
+flask-apispec = "*"
+sqlalchemy = "*"
+black = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
