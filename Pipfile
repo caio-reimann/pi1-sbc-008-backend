@@ -11,9 +11,9 @@ flask-jwt-extended = "*"
 marshmallow = "*"
 python-dotenv = "*"
 flask-bcrypt = "*"
-flask-apispec = "*"
 sqlalchemy = "*"
 black = "*"
+validate-docbr = "*"
 
 [dev-packages]
 

@@ -2,7 +2,6 @@ from db import Base, db_session
 
 
 class ModeloBase:
-
     @classmethod
     def busca_por_id(cls, _id: int):
         """

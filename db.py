@@ -31,6 +31,7 @@ Base.query = db_session.query_property()
 def init_db(bcrypt):
     # Importar todos os modelos para criá-los automaticamente
     from modelos.usuario import UsuarioModel
+
     if os.getenv("DB_INIT") == "1":
         Base.metadata.create_all(bind=engine)
 
@@ -39,11 +40,14 @@ def init_db(bcrypt):
         usuario.nome = "Admin"
         usuario.sobrenome = "Administrador"
         usuario.email = os.environ.get("DB_ADMIN_EMAIL")
-        usuario.password = bcrypt.generate_password_hash(os.environ.get("DB_ADMIN_PASSWORD")).decode('utf-8')
+        usuario.password = bcrypt.generate_password_hash(
+            os.environ.get("DB_ADMIN_PASSWORD")
+        ).decode("utf-8")
         usuario.active = True
         usuario.aceite_termo = True
         usuario.identidade = "000.000.000-00"
         usuario.profissao = "Administrador"
+        usuario.sexo = "M"
 
         if usuario.salva():
             print("Administrador cadastrado com sucesso")

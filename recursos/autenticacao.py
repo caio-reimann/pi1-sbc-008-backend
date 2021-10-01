@@ -3,13 +3,14 @@ from flask_jwt_extended import create_access_token
 from flask_restful import Resource
 from marshmallow import ValidationError
 
-from modelos.usuario import AutenticacaoModel, UsuarioModel
+from modelos.usuario import AutenticacaoSchema, UsuarioModel
 
-auth_schema = AutenticacaoModel()
+auth_schema = AutenticacaoSchema()
 
 
 class Autenticacao(Resource):
     """ """
+
     def post(self):
         json_dados = request.get_json()
         if not json_dados:
@@ -20,21 +21,18 @@ class Autenticacao(Resource):
         except ValidationError as err:
             return err.messages, 422
 
-        usuario = UsuarioModel.busca_por_email(_email=dados['email'])
+        usuario = UsuarioModel.busca_por_email(_email=dados["email"])
 
         if usuario:
             from app import bcrypt
 
-            if bcrypt.check_password_hash(usuario.password, dados['password']):
-                access_token = create_access_token(identity=dados['email'])
+            if bcrypt.check_password_hash(usuario.password, dados["password"]):
+                access_token = create_access_token(identity=dados["email"])
                 return jsonify(access_token=access_token)
             else:
-                return {'message': 'Email ou senha inválido(s)'},  400
+                return {"message": "Email ou senha inválido(s)"}, 400
         else:
-            return {'message': 'Usuário não encontrado'}, 404
-
-    def get(self):
-        return "OK", 200
+            return {"message": "Usuário não encontrado"}, 404
 
 
 class AtualizacaoToken(Resource):
