@@ -9,7 +9,7 @@ from marshmallow import ValidationError
 from modelos.usuario import CadastramentoUsuarioSchema, UsuarioModel, AlteracaoUsuarioSchema
 
 usuario_cadastro_schema = CadastramentoUsuarioSchema()
-usuario_alteracao_schema = AlteracaoUsuarioSchema(exclude=('password', ))
+usuario_alteracao_schema = AlteracaoUsuarioSchema(exclude=('password', 'aceite_termo',))
 
 
 class UsuarioRecurso(Resource):
