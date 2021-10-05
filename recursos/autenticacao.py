@@ -24,13 +24,17 @@ class Autenticacao(Resource):
         usuario = UsuarioModel.busca_por_email(_email=dados["email"])
 
         if usuario:
-            from app import bcrypt
+            if usuario.active:
+                from app import bcrypt
 
-            if bcrypt.check_password_hash(usuario.password, dados["password"]):
-                access_token = create_access_token(identity=dados["email"])
-                return jsonify(access_token=access_token)
+                if bcrypt.check_password_hash(usuario.password, dados["password"]):
+                    additional_claims = {"nome": usuario.nome, "sobrenome": usuario.sobrenome, "id": usuario.id}
+                    access_token = create_access_token(identity=dados["email"], additional_claims=additional_claims)
+                    return jsonify(access_token=access_token)
+                else:
+                    return {"message": "Email ou senha inválido(s)"}, 400
             else:
-                return {"message": "Email ou senha inválido(s)"}, 400
+                return {"message": "Usuário inativo"}, 400
         else:
             return {"message": "Usuário não encontrado"}, 404
 

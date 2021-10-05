@@ -1,6 +1,9 @@
-from marshmallow import Schema, fields, validate, validates, ValidationError
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, or_
+import re
 
+from marshmallow import Schema, fields, validate, validates, ValidationError, EXCLUDE
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, or_, and_
+
+from bibliotecas.validacoes import valida_telefone, valida_cep
 from db import Base
 from modelos.base_model import ModeloBase
 
@@ -46,11 +49,17 @@ class UsuarioModel(Base, ModeloBase):
         return cls.query.filter_by(email=_email).first()
 
     @classmethod
-    def busca_por_duplicidade(cls, _identidade: str, _email: str):
-        return cls.query.filter((cls.identidade == _identidade) | (cls.email == _email)).first()
+    def busca_por_duplicidade(cls, _identidade: str, _email: str, _id: int = 0):
+        if _id > 0:
+            return cls.query.filter(or_(cls.identidade == _identidade) | (cls.email == _email), and_(cls.id != _id)).first()
+        else:
+            return cls.query.filter((cls.identidade == _identidade) | (cls.email == _email)).first()
 
 
 class AutenticacaoSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     email = fields.Str(
         required=True,
         validate=validate.Email(error="Email inválido"),
@@ -62,6 +71,9 @@ class AutenticacaoSchema(Schema):
 
 
 class CadastramentoUsuarioSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     email = fields.Str(
         required=True,
         validate=validate.Email(error="Email inválido"),
@@ -129,3 +141,85 @@ class CadastramentoUsuarioSchema(Schema):
             cpf = CPF()
             if cpf.validate(value) is False:
                 raise ValidationError("'CPF' inválido.")
+
+
+class AlteracaoUsuarioSchema(CadastramentoUsuarioSchema):
+    class Meta:
+        unknown = EXCLUDE
+
+    tel_celular = fields.Str(validate=valida_telefone)
+    tel_comercial = fields.Str(validate=valida_telefone)
+    tel_comercial2 = fields.Str(validate=valida_telefone)
+    tel_comercial3 =fields.Str(validate=valida_telefone)
+    logradouro = fields.Str(
+        validate=validate.Length(
+            max=150,
+            error="O campo 'Logradouro' deve ter no máximo 150 caracteres.",
+        ),
+    )
+    numero = fields.Str(
+        validate=validate.Length(
+            max=20,
+            error="O campo 'Número' deve ter no máximo 20 caracteres.",
+        ),
+    )
+    complemento = fields.Str(
+        validate=validate.Length(
+            max=50,
+            error="O campo 'Complemento' deve ter no máximo 50 caracteres.",
+        ),
+    )
+    bairro = fields.Str(
+        validate=validate.Length(
+            max=100,
+            error="O campo 'Bairro' deve ter no máximo 100 caracteres.",
+        ),
+    )
+    cidade = fields.Str(
+        validate=validate.Length(
+            max=100,
+            error="O campo 'Cidade' deve ter no máximo 100 caracteres.",
+        ),
+    )
+    uf = fields.Str(
+        validate=validate.OneOf([
+            "AC",
+            "AL",
+            "AP",
+            "AM",
+            "BA",
+            "CE",
+            "DF",
+            "ES",
+            "GO",
+            "MA",
+            "MT",
+            "MS",
+            "MG",
+            "PA",
+            "PB",
+            "PR",
+            "PE",
+            "PI",
+            "RJ",
+            "RN",
+            "RS",
+            "RO",
+            "RR",
+            "SC",
+            "SP",
+            "SE",
+            "TO",
+        ],
+            error="Campo 'Estado': opção de  inválida",
+        ),
+    )
+    cep = fields.Str(validate=valida_cep)
+    info_complementar = fields.Str(
+        validate=validate.Length(
+            max=300,
+            error="O campo 'Descrição' deve ter no máximo 300 caracteres.",
+        ),
+    )
+
+

@@ -23,14 +23,6 @@
             ],
             "version": "==9.0.1"
         },
-        "apispec": {
-            "hashes": [
-                "sha256:5bc5404b19259aeeb307ce9956e2c1a97722c6a130ef414671dfc21acd622afc",
-                "sha256:d167890e37f14f3f26b588ff2598af35faa5c27612264ea1125509c8ff860834"
-            ],
-            "markers": "python_version >= '3.6'",
-            "version": "==5.1.1"
-        },
         "bcrypt": {
             "hashes": [
                 "sha256:5b93c1726e50a93a033c36e5ca7fdcd29a5c7395af50a6892f5d9e7c6cfbfb29",
@@ -139,14 +131,6 @@
             ],
             "index": "pypi",
             "version": "==2.0.1"
-        },
-        "flask-apispec": {
-            "hashes": [
-                "sha256:7e82dabcac4234c1540438daac045e8475804b4dcf7f68898ffc47113ab34da0",
-                "sha256:89e05dd2cb6e91ad999033c59aed4b5036aea9f0794d5ea5d9082be8ad4a99f2"
-            ],
-            "index": "pypi",
-            "version": "==0.11.0"
         },
         "flask-bcrypt": {
             "hashes": [

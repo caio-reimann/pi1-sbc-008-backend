@@ -45,3 +45,7 @@ class ModeloBase:
             print(error)
             db_session.rollback()
             return False
+
+        except Exception as e:
+            print(e)
+            return False
