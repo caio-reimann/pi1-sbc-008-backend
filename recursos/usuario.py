@@ -6,14 +6,24 @@ from flask_restful import Resource
 from marshmallow import ValidationError
 
 
-from modelos.usuario import CadastramentoUsuarioSchema, UsuarioModel, AlteracaoUsuarioSchema
+from modelos.usuario import (
+    CadastramentoUsuarioSchema,
+    UsuarioModel,
+    AlteracaoUsuarioSchema,
+)
 
 usuario_cadastro_schema = CadastramentoUsuarioSchema()
-usuario_alteracao_schema = AlteracaoUsuarioSchema(exclude=('password', 'aceite_termo',))
+usuario_alteracao_schema = AlteracaoUsuarioSchema(
+    exclude=(
+        "password",
+        "aceite_termo",
+    )
+)
 
 
 class UsuarioRecurso(Resource):
     """ """
+
     def put(self):
         json_dados = request.get_json()
         if not json_dados:
@@ -24,7 +34,9 @@ class UsuarioRecurso(Resource):
         except ValidationError as err:
             return err.messages, 422
 
-        duplicidade = UsuarioModel.busca_por_duplicidade(_email=dados["email"], _identidade=dados["identidade"])
+        duplicidade = UsuarioModel.busca_por_duplicidade(
+            _email=dados["email"], _identidade=dados["identidade"]
+        )
 
         if duplicidade:
             if duplicidade.identidade == dados["identidade"]:
@@ -36,7 +48,8 @@ class UsuarioRecurso(Resource):
                 return {"message": "Email já cadastrado."}, 400
 
         from app import bcrypt
-        dados['password'] = bcrypt.generate_password_hash(
+
+        dados["password"] = bcrypt.generate_password_hash(
             os.environ.get("DB_ADMIN_PASSWORD")
         ).decode("utf-8")
 
@@ -63,7 +76,9 @@ class UsuarioRecurso(Resource):
         except ValidationError as err:
             return err.messages, 422
 
-        duplicidade = UsuarioModel.busca_por_duplicidade(_email=dados["email"], _identidade=dados["identidade"], _id = id_usuario)
+        duplicidade = UsuarioModel.busca_por_duplicidade(
+            _email=dados["email"], _identidade=dados["identidade"], _id=id_usuario
+        )
 
         if duplicidade:
             if duplicidade.identidade == dados["identidade"]:
@@ -91,7 +106,7 @@ class UsuarioRecurso(Resource):
         current_user = get_jwt_identity()
         usuario = UsuarioModel.busca_por_email(_email=current_user)
         if usuario:
-            usuario_json = AlteracaoUsuarioSchema(exclude=('password', ))
+            usuario_json = AlteracaoUsuarioSchema(exclude=("password",))
             res = usuario_json.dump(usuario)
             return res, 200
         else:

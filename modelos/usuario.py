@@ -2,6 +2,7 @@ import re
 
 from marshmallow import Schema, fields, validate, validates, ValidationError, EXCLUDE
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, or_, and_
+from sqlalchemy.orm import relationship
 
 from bibliotecas.validacoes import valida_telefone, valida_cep
 from db import Base
@@ -33,6 +34,8 @@ class UsuarioModel(Base, ModeloBase):
     cep = Column(String(10), nullable=True, comment="CEP")
     info_complementar = Column(Text, comment="Informações complementares")
 
+    clientes = relationship("ClienteModel", back_populates="usuario")
+
     aceite_termo = Column(
         Boolean,
         nullable=False,
@@ -51,9 +54,14 @@ class UsuarioModel(Base, ModeloBase):
     @classmethod
     def busca_por_duplicidade(cls, _identidade: str, _email: str, _id: int = 0):
         if _id > 0:
-            return cls.query.filter(or_(cls.identidade == _identidade) | (cls.email == _email), and_(cls.id != _id)).first()
+            return cls.query.filter(
+                or_(cls.identidade == _identidade) | (cls.email == _email),
+                and_(cls.id != _id),
+            ).first()
         else:
-            return cls.query.filter((cls.identidade == _identidade) | (cls.email == _email)).first()
+            return cls.query.filter(
+                (cls.identidade == _identidade) | (cls.email == _email)
+            ).first()
 
 
 class AutenticacaoSchema(Schema):
@@ -133,6 +141,7 @@ class CadastramentoUsuarioSchema(Schema):
     @validates("identidade")
     def valida_cpf_cnpj(self, value):
         from validate_docbr import CPF, CNPJ
+
         if len(value) == 18:
             cnpj = CNPJ()
             if cnpj.validate(value) is False:
@@ -150,7 +159,7 @@ class AlteracaoUsuarioSchema(CadastramentoUsuarioSchema):
     tel_celular = fields.Str(validate=valida_telefone)
     tel_comercial = fields.Str(validate=valida_telefone)
     tel_comercial2 = fields.Str(validate=valida_telefone)
-    tel_comercial3 =fields.Str(validate=valida_telefone)
+    tel_comercial3 = fields.Str(validate=valida_telefone)
     logradouro = fields.Str(
         validate=validate.Length(
             max=150,
@@ -182,35 +191,36 @@ class AlteracaoUsuarioSchema(CadastramentoUsuarioSchema):
         ),
     )
     uf = fields.Str(
-        validate=validate.OneOf([
-            "AC",
-            "AL",
-            "AP",
-            "AM",
-            "BA",
-            "CE",
-            "DF",
-            "ES",
-            "GO",
-            "MA",
-            "MT",
-            "MS",
-            "MG",
-            "PA",
-            "PB",
-            "PR",
-            "PE",
-            "PI",
-            "RJ",
-            "RN",
-            "RS",
-            "RO",
-            "RR",
-            "SC",
-            "SP",
-            "SE",
-            "TO",
-        ],
+        validate=validate.OneOf(
+            [
+                "AC",
+                "AL",
+                "AP",
+                "AM",
+                "BA",
+                "CE",
+                "DF",
+                "ES",
+                "GO",
+                "MA",
+                "MT",
+                "MS",
+                "MG",
+                "PA",
+                "PB",
+                "PR",
+                "PE",
+                "PI",
+                "RJ",
+                "RN",
+                "RS",
+                "RO",
+                "RR",
+                "SC",
+                "SP",
+                "SE",
+                "TO",
+            ],
             error="Campo 'Estado': opção de  inválida",
         ),
     )
@@ -221,5 +231,3 @@ class AlteracaoUsuarioSchema(CadastramentoUsuarioSchema):
             error="O campo 'Descrição' deve ter no máximo 300 caracteres.",
         ),
     )
-
-
