@@ -1,6 +1,6 @@
 import re
 
-from marshmallow import Schema, fields, validate, validates, ValidationError, EXCLUDE
+from marshmallow import Schema, fields, validate, validates, ValidationError, EXCLUDE, validates_schema
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, or_, and_
 from sqlalchemy.orm import relationship
 
@@ -92,9 +92,13 @@ class CadastramentoUsuarioSchema(Schema):
         validate=validate.Length(
             min=6,
             max=30,
-            error="o campo 'Senha' deve ter no mínimo 6 e no máximo 30 caracteres.",
+            error="O campo 'Senha' deve ter no mínimo 6 e no máximo 30 caracteres.",
         ),
         error_messages={"required": "O campo 'Senha' é obrigatório"},
+    )
+    cpassword = fields.Str(
+        required=True,
+        error_messages={"required": "O campo 'Confirmar senha' é obrigatório"},
     )
     nome = fields.Str(
         required=True,
@@ -150,6 +154,11 @@ class CadastramentoUsuarioSchema(Schema):
             cpf = CPF()
             if cpf.validate(value) is False:
                 raise ValidationError("'CPF' inválido.")
+
+    @validates_schema
+    def validate_numbers(self, data, **kwargs):
+        if data["password"] != data["cpassword"]:
+            raise ValidationError("O campo 'Senha' e 'Confirmar senha' devem ser iguais.")
 
 
 class AlteracaoUsuarioSchema(CadastramentoUsuarioSchema):
