@@ -14,6 +14,7 @@ flask-bcrypt = "*"
 sqlalchemy = "*"
 black = "*"
 validate-docbr = "*"
+gunicorn = "*"
 
 [dev-packages]
 
