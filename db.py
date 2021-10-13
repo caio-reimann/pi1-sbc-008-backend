@@ -12,11 +12,11 @@ load_dotenv()
 
 engine = create_engine(
     os.environ.get("DATABASE_URL"),
-    # pool_size=int(os.environ.get("DB_POOL_SIZE")),
-    # max_overflow=int(os.environ.get("DB_MAX_OVERFLOW")),
-    # pool_recycle=300,
-    # pool_pre_ping=True,
-    # pool_use_lifo=True,
+    pool_size=int(os.environ.get("DB_POOL_SIZE")),
+    max_overflow=int(os.environ.get("DB_MAX_OVERFLOW")),
+    pool_recycle=300,
+    pool_pre_ping=True,
+    pool_use_lifo=True,
     echo=True if os.environ.get("DEBUG_SQL") == "1" else False,
 )
 
