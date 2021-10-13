@@ -118,7 +118,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"caio.reimann@live.com\",\r\n    \"password\": \"UnivespPI1\"\r\n\r\n}",
+					"raw": "{\r\n    \"email\": \"caio.reimann@teste.com.br\",\r\n    \"password\": \"UnivespPI1\"\r\n\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
