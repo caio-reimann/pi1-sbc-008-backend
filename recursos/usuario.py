@@ -53,6 +53,8 @@ class UsuarioRecurso(Resource):
             os.environ.get("DB_ADMIN_PASSWORD")
         ).decode("utf-8")
 
+        dados.pop("cpassword")
+
         usuario = UsuarioModel(**dados)
 
         if usuario.salva():
