@@ -1,7 +1,6 @@
 import os
 
 from flask import request, jsonify
-from flask_apispec import MethodResource, marshal_with, doc, use_kwargs
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from flask_restful import Resource
 from marshmallow import ValidationError
@@ -17,15 +16,14 @@ usuario_cadastro_schema = CadastramentoUsuarioSchema()
 usuario_alteracao_schema = AlteracaoUsuarioSchema(
     exclude=(
         "password",
+        "cpassword",
         "aceite_termo",
     )
 )
 
 
-class UsuarioRecurso(MethodResource, Resource):
+class UsuarioRecurso(Resource):
     """ """
-    @use_kwargs(usuario_cadastro_schema)
-    @doc(description='Cadastramento de um novo usuário', tags=['Usuário'])
     def put(self):
         json_dados = request.get_json()
         if not json_dados:
@@ -65,8 +63,6 @@ class UsuarioRecurso(MethodResource, Resource):
             return {"message": "Ocorreu um erro, tente novamente"}, 500
 
     @jwt_required()
-    @use_kwargs(usuario_alteracao_schema)
-    @doc(description='Alteração do cadastro de um usuário', tags=['Usuário'])
     def post(self):
 
         claims = get_jwt()
@@ -107,8 +103,6 @@ class UsuarioRecurso(MethodResource, Resource):
             return {"message": "Ocorreu um erro, tente novamente"}, 500
 
     @jwt_required()
-    @doc(description='Resgate dos dados do usuário', tags=['Usuário'])
-    @marshal_with(AlteracaoUsuarioSchema(exclude=("password",)))
     def get(self):
         # Access the identity of the current user with get_jwt_identity
         current_user = get_jwt_identity()

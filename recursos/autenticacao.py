@@ -1,5 +1,4 @@
 from flask import request, jsonify
-from flask_apispec import use_kwargs, marshal_with, MethodResource, doc
 from flask_jwt_extended import create_access_token
 from flask_restful import Resource
 from marshmallow import ValidationError
@@ -9,11 +8,8 @@ from modelos.usuario import AutenticacaoSchema, UsuarioModel
 auth_schema = AutenticacaoSchema()
 
 
-class Autenticacao(MethodResource, Resource):
-    """ """
-    @marshal_with(auth_schema)
-    @doc(description='Autenticação do usuário cadastrado', tags=['Autenticação'])
-    def post(self):
+class Autenticacao(Resource):
+     def post(self):
         json_dados = request.get_json()
         if not json_dados:
             return {"message": "Nenhum dado foi enviado"}, 400
@@ -47,6 +43,6 @@ class Autenticacao(MethodResource, Resource):
             return {"message": "Usuário não encontrado"}, 404
 
 
-class AtualizacaoToken(MethodResource, Resource):
+class AtualizacaoToken(Resource):
     def post(self):
         return "OK", 200

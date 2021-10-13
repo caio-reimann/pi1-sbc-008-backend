@@ -15,7 +15,6 @@ sqlalchemy = "*"
 validate-docbr = "==1.9.0"
 gunicorn = "*"
 psycopg2 = "*"
-flask-apispec = "*"
 
 [dev-packages]
 

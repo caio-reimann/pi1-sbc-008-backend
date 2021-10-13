@@ -156,7 +156,7 @@ class CadastramentoUsuarioSchema(Schema):
                 raise ValidationError("'CPF' inválido.")
 
     @validates_schema
-    def validate_numbers(self, data, **kwargs):
+    def validate_schema(self, data, **kwargs):
         if data["password"] != data["cpassword"]:
             raise ValidationError("O campo 'Senha' e 'Confirmar senha' devem ser iguais.")
 
@@ -240,3 +240,7 @@ class AlteracaoUsuarioSchema(CadastramentoUsuarioSchema):
             error="O campo 'Descrição' deve ter no máximo 300 caracteres.",
         ),
     )
+
+    @validates_schema
+    def validate_schema(self, data, **kwargs):
+        pass
