@@ -1,5 +1,6 @@
 import os
 
+from flasgger import SwaggerView, swag_from
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from flask_restful import Resource
@@ -23,7 +24,14 @@ usuario_alteracao_schema = AlteracaoUsuarioSchema(
 )
 
 
-class UsuarioRecurso(Resource):
+class UsuarioRecurso(SwaggerView):
+
+    definitions = {
+        'CadastramentoUsuarioSchema': CadastramentoUsuarioSchema,
+        'AlteracaoUsuarioSchema': AlteracaoUsuarioSchema
+    }
+
+    @swag_from(f'swagger{os.sep}usuario_put.yml', validation=False)
     def put(self):
         json_dados = request.get_json()
         if not json_dados:
@@ -63,6 +71,7 @@ class UsuarioRecurso(Resource):
             return {"message": "Ocorreu um erro, tente novamente"}, 500
 
     @jwt_required()
+    @swag_from(f'swagger{os.sep}usuario_post.yml', validation=False)
     def post(self):
 
         claims = get_jwt()
@@ -103,6 +112,7 @@ class UsuarioRecurso(Resource):
             return {"message": "Ocorreu um erro, tente novamente"}, 500
 
     @jwt_required()
+    @swag_from(f'swagger{os.sep}usuario_get.yml', validation=False)
     def get(self):
         # Access the identity of the current user with get_jwt_identity
         current_user = get_jwt_identity()

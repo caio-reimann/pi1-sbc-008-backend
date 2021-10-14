@@ -1,5 +1,5 @@
 tags:
-  - Autenticação
+  - Usuário
 consumes:
 - "application/json"
 produces:
@@ -28,19 +28,3 @@ responses:
           type: string
           description: Mensagem de erro
           example: "Email ou senha inválido(s)"
-  422:
-    description: Corpo inválido e/ou informações fora do padrão (Dicionário com cada campo com erro)
-    schema:
-      properties:
-        email:
-          type: array
-          items:
-            type: string
-            description: Mensagem de erro
-            example: "O campo 'Email' é obrigatório"
-        passeord:
-          type: array
-          items:
-            type: string
-            description: Mensagem de erro
-            example: "O campo 'Senha' é obrigatório"
