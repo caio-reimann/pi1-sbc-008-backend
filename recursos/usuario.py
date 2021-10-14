@@ -12,6 +12,7 @@ from modelos.usuario import (
     AlteracaoUsuarioSchema,
 )
 
+
 usuario_cadastro_schema = CadastramentoUsuarioSchema()
 usuario_alteracao_schema = AlteracaoUsuarioSchema(
     exclude=(
@@ -23,7 +24,6 @@ usuario_alteracao_schema = AlteracaoUsuarioSchema(
 
 
 class UsuarioRecurso(Resource):
-    """ """
     def put(self):
         json_dados = request.get_json()
         if not json_dados:

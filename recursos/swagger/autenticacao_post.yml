@@ -1,0 +1,46 @@
+tags:
+  - Autenticação
+consumes:
+- "application/json"
+produces:
+- "application/json"
+parameters:
+- in: "body"
+  name: "body"
+  description: "Informar o email e password"
+  required: true
+  schema:
+    $ref: "#/definitions/AutenticacaoSchema"
+responses:
+  200:
+    description: Retorna um token de acesso
+    schema:
+      properties:
+        access_token:
+          type: string
+          description: Token de acesso
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzNDI1MzQ4OCwianRpIjoiZWY5MTcxZTEtYjY4MS00ZmUwLTg3NzYtYjE2YzcxNzIzM2IzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImNhaW8ucmVpbWFubkBsaXZlLmNvbSIsIm5iZiI6MTYzNDI1MzQ4OCwiZXhwIjoxNjM0MjU0Mzg4LCJub21lIjoiQ2FpbyIsInNvYnJlbm9tZSI6ImRhIFNpbHZhICIsImlkIjoxfQ.ACm_r7FT4QEZJw82jVqDUV19P81-fGv95WGAoSUZNZA"
+  400:
+    description: Ocorreu um erro no processamento das informações
+    schema:
+      properties:
+        message:
+          type: string
+          description: Mensagem de erro
+          example: "Email ou senha inválido(s)"
+  422:
+    description: Corpo inválido e/ou informações fora do padrão
+    schema:
+      properties:
+        email:
+          type: array
+          items:
+            type: string
+            description: Mensagem de erro
+            example: "O campo 'Email' é obrigatório"
+        passeord:
+          type: array
+          items:
+            type: string
+            description: Mensagem de erro
+            example: "O campo 'Senha' é obrigatório"

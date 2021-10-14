@@ -1,12 +1,12 @@
 import os
 
-from flask import Flask, Blueprint
+from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
 from db import db_session, init_db
 
-from routes import inicializa_rotas
+from routes import inicializa_rotas, inicializa_swagger
 
 app = Flask(__name__)
 api = Api(app)
@@ -22,6 +22,8 @@ else:
     app.config.from_object("config.DevelopmentConfig")
 
 inicializa_rotas(api=api)
+inicializa_swagger(app=app)
+
 
 
 @app.teardown_request

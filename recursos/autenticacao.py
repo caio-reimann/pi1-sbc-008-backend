@@ -1,3 +1,6 @@
+import os
+
+from flasgger import swag_from, SwaggerView
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token
 from flask_restful import Resource
@@ -8,7 +11,11 @@ from modelos.usuario import AutenticacaoSchema, UsuarioModel
 auth_schema = AutenticacaoSchema()
 
 
-class Autenticacao(Resource):
+class Autenticacao(SwaggerView):
+
+     definitions = {'AutenticacaoSchema': AutenticacaoSchema}
+
+     @swag_from(f'swagger{os.sep}autenticacao_post.yml', validation=False)
      def post(self):
         json_dados = request.get_json()
         if not json_dados:
