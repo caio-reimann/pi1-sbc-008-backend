@@ -14,9 +14,9 @@ class Config:
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
     MAIL_SERVER = "smtp.gmail.com"
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
-    MAIL_USE_SSL = False
+    MAIL_PORT = 465
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
     MAIL_USERNAME = "univesptec@gmail.com"
     MAIL_PASSWORD = "1cde5d9cc2a1a80c4bb2468e92b"
 
