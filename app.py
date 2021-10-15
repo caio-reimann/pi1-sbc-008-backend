@@ -12,21 +12,18 @@ from db import db_session, init_db
 from routes import inicializa_rotas
 
 app = Flask(__name__)
-api = Api(app)
-
-jwt = JWTManager(app)
-
-bcrypt = Bcrypt(app)
-
-mail = Mail(app)
-
-swagger = inicializa_swagger(app=app)
-
 
 if app.config["ENV"] == "production":
     app.config.from_object("config.ProductionConfig")
 else:
     app.config.from_object("config.DevelopmentConfig")
+
+# Inicialização de outras bibliotecas
+api = Api(app)
+jwt = JWTManager(app)
+bcrypt = Bcrypt(app)
+mail = Mail(app)
+swagger = inicializa_swagger(app=app)
 
 inicializa_rotas(api=api)
 

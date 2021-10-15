@@ -19,6 +19,7 @@ class Config:
     MAIL_USE_SSL = True
     MAIL_USERNAME = "univesptec@gmail.com"
     MAIL_PASSWORD = "1cde5d9cc2a1a80c4bb2468e92b"
+    MAIL_DEFAULT_SENDER = "univesptec@gmail.com"
 
 
 class ProductionConfig(Config):
