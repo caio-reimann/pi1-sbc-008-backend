@@ -4,27 +4,18 @@ consumes:
 - "application/json"
 produces:
 - "application/json"
-parameters:
-- in: "body"
-  name: "body"
-  description: "Informar o email e password"
-  required: true
-  schema:
-    $ref: "#/definitions/AutenticacaoSchema"
+security:
+- bearerAuth: []
 responses:
   200:
-    description: Retorna um token de acesso
+    description: Retorna os dados do usuário
     schema:
-      properties:
-        access_token:
-          type: string
-          description: Token de acesso
-          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzNDI1MzQ4OCwianRpIjoiZWY5MTcxZTEtYjY4MS00ZmUwLTg3NzYtYjE2YzcxNzIzM2IzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImNhaW8ucmVpbWFubkBsaXZlLmNvbSIsIm5iZiI6MTYzNDI1MzQ4OCwiZXhwIjoxNjM0MjU0Mzg4LCJub21lIjoiQ2FpbyIsInNvYnJlbm9tZSI6ImRhIFNpbHZhICIsImlkIjoxfQ.ACm_r7FT4QEZJw82jVqDUV19P81-fGv95WGAoSUZNZA"
-  400:
-    description: Ocorreu um erro no processamento das informações
+      $ref: "#/definitions/VisualizacaoUsuarioSchema"
+  404:
+    description: Usuário não encontrado
     schema:
       properties:
         message:
           type: string
           description: Mensagem de erro
-          example: "Email ou senha inválido(s)"
+          example: "Usuário não localizado"

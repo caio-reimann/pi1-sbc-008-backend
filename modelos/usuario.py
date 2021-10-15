@@ -164,6 +164,7 @@ class CadastramentoUsuarioSchema(Schema):
 class AlteracaoUsuarioSchema(CadastramentoUsuarioSchema):
     class Meta:
         unknown = EXCLUDE
+        exclude = ("password", "cpassword", "aceite_termo")
 
     tel_celular = fields.Str(validate=valida_telefone)
     tel_comercial = fields.Str(validate=valida_telefone)
@@ -244,3 +245,8 @@ class AlteracaoUsuarioSchema(CadastramentoUsuarioSchema):
     @validates_schema
     def validate_schema(self, data, **kwargs):
         pass
+
+
+class VisualizacaoUsuarioSchema(AlteracaoUsuarioSchema):
+    class Meta:
+        exclude = ("password", "cpassword")

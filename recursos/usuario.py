@@ -10,7 +10,7 @@ from marshmallow import ValidationError
 from modelos.usuario import (
     CadastramentoUsuarioSchema,
     UsuarioModel,
-    AlteracaoUsuarioSchema,
+    AlteracaoUsuarioSchema, VisualizacaoUsuarioSchema,
 )
 
 
@@ -28,7 +28,8 @@ class UsuarioRecurso(SwaggerView):
 
     definitions = {
         'CadastramentoUsuarioSchema': CadastramentoUsuarioSchema,
-        'AlteracaoUsuarioSchema': AlteracaoUsuarioSchema
+        'AlteracaoUsuarioSchema': AlteracaoUsuarioSchema,
+        'VisualizacaoUsuarioSchema': VisualizacaoUsuarioSchema,
     }
 
     @swag_from(f'swagger{os.sep}usuario_put.yml', validation=False)
@@ -107,7 +108,7 @@ class UsuarioRecurso(SwaggerView):
                 setattr(usuario, chave, valor)
 
         if usuario.salva():
-            return {"message": "Usuário alterado com sucesso."}, 200
+            return {"message": "Usuário alterado com sucesso"}, 200
         else:
             return {"message": "Ocorreu um erro, tente novamente"}, 500
 

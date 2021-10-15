@@ -27,7 +27,13 @@ def inicializa_swagger(app: Flask):
         # "static_folder": "static",  # must be set by user
         "swagger_ui": True,
         "specs_route": "/apidocs/",
-
+        "securityDefinitions": {
+            "bearerAuth": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header",
+            }
+        }
     }
 
     swag = Swagger(app, config=swagger_config)

@@ -25,7 +25,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nome\": \"Caio\",\r\n    \"sobrenome\": \"da Silva \",\r\n    \"email\": \"caio.reimann@teste.com.br\",\r\n    \"password\": \"asenhadojoao\",\r\n    \"sexo\": \"M\",\r\n    \"aceite_termo\": true,\r\n    \"identidade\": \"438.460.430-01\",\r\n    \"profissao\": \"Marceneiro\",\r\n    \"logradouro\": \"Rua das Pamonhas\",\r\n    \"numero\": \"19A\",\r\n    \"complemento\": \"Apartamento 10 Bloco 5\",\r\n    \"bairro\": \"Centro\",\r\n    \"cidade\": \"Santo André\",\r\n    \"uf\": \"SP\",\r\n    \"cep\": \"00000-000\",\r\n    \"tel_celular\": \"(11) 99750-1819\",\r\n    \"tel_comercial\": \"(11) 99750-1919\",\r\n    \"tel_comercial2\": \"(11) 99750-1719\",\r\n    \"tel_comercial3\": \"(11) 99750-1619\",\r\n    \"info_complementar\": \"AAAAAAAAA\"\r\n}",
+							"raw": "{\r\n    \"nome\": \"Caio\",\r\n    \"sobrenome\": \"da Silva \",\r\n    \"email\": \"caio.reimann@live.com\",\r\n    \"sexo\": \"M\",\r\n    \"aceite_termo\": true,\r\n    \"identidade\": \"438.460.430-01\",\r\n    \"profissao\": \"Marceneiro\",\r\n    \"logradouro\": \"Rua das Pamonhas\",\r\n    \"numero\": \"19A\",\r\n    \"complemento\": \"Apartamento 10 Bloco 5\",\r\n    \"bairro\": \"Centro\",\r\n    \"cidade\": \"Santo André\",\r\n    \"uf\": \"SP\",\r\n    \"cep\": \"00000-000\",\r\n    \"tel_celular\": \"(11) 99750-1819\",\r\n    \"tel_comercial\": \"(11) 99750-1919\",\r\n    \"tel_comercial2\": \"(11) 99750-1719\",\r\n    \"tel_comercial3\": \"(11) 99750-1619\",\r\n    \"info_complementar\": \"AAAAAAAAA\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -51,7 +51,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nome\": \"João\",\r\n    \"sobrenome\": \"da Silva \",\r\n    \"email\": \"joao_da_silva@teste.com.br\",\r\n    \"password\": \"asenhadojoao\",\r\n    \"sexo\": \"M\",\r\n    \"aceite_termo\": true,\r\n    \"identidade\": \"547.386.600-04\",\r\n    \"profissao\": \"Marceneiro\"\r\n}",
+							"raw": "{\r\n    \"nome\": \"João\",\r\n    \"sobrenome\": \"da Silva \",\r\n    \"email\": \"joao_da_silva2@teste.com.br\",\r\n    \"password\": \"asenhadojoao\",\r\n    \"cpassword\": \"asenhadojoao\",\r\n    \"sexo\": \"M\",\r\n    \"aceite_termo\": true,\r\n    \"identidade\": \"325.143.520-53\",\r\n    \"profissao\": \"Marceneiro\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -118,7 +118,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"caio.reimann@teste.com.br\",\r\n    \"password\": \"UnivespPI1\"\r\n\r\n}",
+					"raw": "{\r\n    \"email\": \"caio.reimann@live.com\",\r\n    \"password\": \"UnivespPI1\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
