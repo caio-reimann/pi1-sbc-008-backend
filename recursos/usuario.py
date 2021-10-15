@@ -197,7 +197,7 @@ class UsuarioRecuperaSenhaRecurso(SwaggerView):
                 msg = Message(
                     subject="Recuperar senha",
                     sender=os.getenv("MAIL_USERNAME"),
-                    recipients=(usuario.email,),
+                    recipients=[usuario.email],
                     body="Clique aqui para recuperar a sua senha"
                 )
             try:
