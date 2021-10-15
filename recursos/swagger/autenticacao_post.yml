@@ -28,6 +28,16 @@ responses:
           type: string
           description: Mensagem de erro
           example: "Email ou senha inválido(s)"
+
+  404:
+    description: Usuário não encontrado
+    schema:
+      properties:
+        message:
+          type: string
+          description: Mensagem de erro
+          example: "Usuário não localizado"
+
   422:
     description: Corpo inválido e/ou informações fora do padrão (Dicionário com cada campo com erro)
     schema:
@@ -43,4 +53,11 @@ responses:
           items:
             type: string
             description: Mensagem de erro
-            example: "O campo 'Senha' é obrigatório"
+  500:
+    description: Ocorreu um erro no no Servidor
+    schema:
+      properties:
+        message:
+          type: string
+          description: Mensagem de erro
+          example: "Ocorreu um erro, tente novamente"

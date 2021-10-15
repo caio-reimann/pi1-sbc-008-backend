@@ -78,7 +78,31 @@ class AutenticacaoSchema(Schema):
     )
 
 
-class CadastramentoUsuarioSchema(Schema):
+class SenhaUsuarioSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    password = fields.Str(
+        required=True,
+        validate=validate.Length(
+            min=6,
+            max=30,
+            error="O campo 'Senha' deve ter no mínimo 6 e no máximo 30 caracteres.",
+        ),
+        error_messages={"required": "O campo 'Senha' é obrigatório"},
+    )
+    cpassword = fields.Str(
+        required=True,
+        error_messages={"required": "O campo 'Confirmar senha' é obrigatório"},
+    )
+
+    @validates_schema
+    def validate_schema(self, data, **kwargs):
+        if data["password"] != data["cpassword"]:
+            raise ValidationError("O campo 'Senha' e 'Confirmar senha' devem ser iguais.")
+
+
+class CadastramentoUsuarioSchema(SenhaUsuarioSchema):
     class Meta:
         unknown = EXCLUDE
 
@@ -154,11 +178,6 @@ class CadastramentoUsuarioSchema(Schema):
             cpf = CPF()
             if cpf.validate(value) is False:
                 raise ValidationError("'CPF' inválido.")
-
-    @validates_schema
-    def validate_schema(self, data, **kwargs):
-        if data["password"] != data["cpassword"]:
-            raise ValidationError("O campo 'Senha' e 'Confirmar senha' devem ser iguais.")
 
 
 class AlteracaoUsuarioSchema(CadastramentoUsuarioSchema):
@@ -250,3 +269,14 @@ class AlteracaoUsuarioSchema(CadastramentoUsuarioSchema):
 class VisualizacaoUsuarioSchema(AlteracaoUsuarioSchema):
     class Meta:
         exclude = ("password", "cpassword")
+
+
+class RecuperaSenhaEmailUsuarioSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    email = fields.Str(
+        required=True,
+        validate=validate.Email(error="Email inválido"),
+        error_messages={"required": "O campo 'Email' é obrigatório"},
+    )

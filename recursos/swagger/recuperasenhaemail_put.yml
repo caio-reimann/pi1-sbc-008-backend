@@ -1,5 +1,5 @@
 tags:
-  - Usuário
+  - Autenticação
 consumes:
 - "application/json"
 produces:
@@ -7,19 +7,19 @@ produces:
 parameters:
 - in: "body"
   name: "body"
-  description: "Cadastra um usuário novo"
+  description: "Envia o token para a recuperação da senha de um usuário cadastrado"
   required: true
   schema:
-    $ref: "#/definitions/CadastramentoUsuarioSchema"
+    $ref: "#/definitions/RecuperaSenhaEmailUsuarioSchema"
 responses:
-  201:
-    description: Cadastro realizado com sucesso
+  200:
+    description: Email de recuperação de senha enviado
     schema:
       properties:
         message:
           type: string
           description: Mensagem de retorno
-          example: "Usuário cadastrado com sucesso"
+          example: "Email de recuperação de senha enviado com sucesso"
   400:
     description: Ocorreu um erro no processamento das informações
     schema:
@@ -27,17 +27,33 @@ responses:
         message:
           type: string
           description: Mensagem de erro
-          example: "Email ou senha inválido(s)"
+          example: "Nenhum dado foi enviado"
+
+  404:
+    description: Usuário não encontrado
+    schema:
+      properties:
+        message:
+          type: string
+          description: Mensagem de erro
+          example: "Usuário não localizado"
+
   422:
     description: Corpo inválido e/ou informações fora do padrão (Dicionário com cada campo com erro)
     schema:
       properties:
-        nome:
+        password:
           type: array
           items:
             type: string
             description: Mensagem de erro
-            example: "O campo 'Nome' é obrigatório"
+            example: "O campo 'Senha' é obrigatório"
+        cpassword:
+          type: array
+          items:
+            type: string
+            description: Mensagem de erro
+            example: "O campo 'Confirmar senha' é obrigatório"
   500:
     description: Ocorreu um erro no no Servidor
     schema:

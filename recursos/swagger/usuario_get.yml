@@ -19,3 +19,11 @@ responses:
           type: string
           description: Mensagem de erro
           example: "Usuário não localizado"
+  500:
+    description: Ocorreu um erro no no Servidor
+    schema:
+      properties:
+        message:
+          type: string
+          description: Mensagem de erro
+          example: "Ocorreu um erro, tente novamente"
