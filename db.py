@@ -31,7 +31,8 @@ Base.query = db_session.query_property()
 def init_db(bcrypt):
     # Importar todos os modelos para criá-los automaticamente
     from modelos.usuario import UsuarioModel
-    from modelos.clientes import ClienteModel
+    from modelos.orcamentos import OrcamentoModel
+    from modelos.itens_orcamento import ItemOrcamentoModel
 
     if os.getenv("DB_INIT") == "1":
         Base.metadata.create_all(bind=engine)

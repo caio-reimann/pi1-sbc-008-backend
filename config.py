@@ -2,6 +2,7 @@ import os
 from flask import Flask
 from flasgger import Swagger
 
+
 class Config:
     DEBUG = False
     TESTING = False
@@ -41,12 +42,11 @@ def inicializa_swagger(app: Flask) -> Swagger:
     :return:
     """
     swagger_config = {
-        "headers": [
-        ],
+        "headers": [],
         "specs": [
             {
-                "endpoint": 'apispec_1',
-                "route": '/apispec_1.json',
+                "endpoint": "apispec_1",
+                "route": "/apispec_1.json",
                 "rule_filter": lambda rule: True,  # all in
                 "model_filter": lambda tag: True,  # all in
             }
@@ -61,7 +61,7 @@ def inicializa_swagger(app: Flask) -> Swagger:
                 "name": "Authorization",
                 "in": "header",
             }
-        }
+        },
     }
 
     return Swagger(app, config=swagger_config)

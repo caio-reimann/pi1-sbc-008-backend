@@ -11,7 +11,10 @@ from flask_mail import Message
 from modelos.usuario import (
     CadastramentoUsuarioSchema,
     UsuarioModel,
-    AlteracaoUsuarioSchema, VisualizacaoUsuarioSchema, SenhaUsuarioSchema, RecuperaSenhaEmailUsuarioSchema,
+    AlteracaoUsuarioSchema,
+    VisualizacaoUsuarioSchema,
+    SenhaUsuarioSchema,
+    RecuperaSenhaEmailUsuarioSchema,
 )
 
 
@@ -31,12 +34,12 @@ recupera_senha_email_usuario_schema = RecuperaSenhaEmailUsuarioSchema()
 class UsuarioRecurso(SwaggerView):
 
     definitions = {
-        'CadastramentoUsuarioSchema': CadastramentoUsuarioSchema,
-        'AlteracaoUsuarioSchema': AlteracaoUsuarioSchema,
-        'VisualizacaoUsuarioSchema': VisualizacaoUsuarioSchema,
+        "CadastramentoUsuarioSchema": CadastramentoUsuarioSchema,
+        "AlteracaoUsuarioSchema": AlteracaoUsuarioSchema,
+        "VisualizacaoUsuarioSchema": VisualizacaoUsuarioSchema,
     }
 
-    @swag_from(f'swagger{os.sep}usuario_put.yml', validation=False)
+    @swag_from(f"swagger{os.sep}usuario_put.yml", validation=False)
     def put(self):
         json_dados = request.get_json()
         if not json_dados:
@@ -76,7 +79,7 @@ class UsuarioRecurso(SwaggerView):
             return {"message": "Ocorreu um erro, tente novamente"}, 500
 
     @jwt_required()
-    @swag_from(f'swagger{os.sep}usuario_post.yml', validation=False)
+    @swag_from(f"swagger{os.sep}usuario_post.yml", validation=False)
     def post(self):
 
         claims = get_jwt()
@@ -119,7 +122,7 @@ class UsuarioRecurso(SwaggerView):
             return {"message": "Usuário não localizado"}, 404
 
     @jwt_required()
-    @swag_from(f'swagger{os.sep}usuario_get.yml', validation=False)
+    @swag_from(f"swagger{os.sep}usuario_get.yml", validation=False)
     def get(self):
         # Access the identity of the current user with get_jwt_identity
         current_user = get_jwt_identity()
@@ -135,11 +138,11 @@ class UsuarioRecurso(SwaggerView):
 class UsuarioSenhaRecurso(SwaggerView):
 
     definitions = {
-        'SenhaUsuarioSchema': SenhaUsuarioSchema,
+        "SenhaUsuarioSchema": SenhaUsuarioSchema,
     }
 
     @jwt_required()
-    @swag_from(f'swagger{os.sep}alterasenha_post.yml', validation=False)
+    @swag_from(f"swagger{os.sep}alterasenha_post.yml", validation=False)
     def post(self):
 
         claims = get_jwt()
@@ -159,7 +162,10 @@ class UsuarioSenhaRecurso(SwaggerView):
 
         if usuario:
             from app import bcrypt
-            usuario.password = bcrypt.generate_password_hash(dados["password"]).decode("utf-8")
+
+            usuario.password = bcrypt.generate_password_hash(dados["password"]).decode(
+                "utf-8"
+            )
 
             if usuario.salva():
                 return {"message": "Senha alterada com sucesso"}, 200
@@ -172,10 +178,10 @@ class UsuarioSenhaRecurso(SwaggerView):
 class UsuarioRecuperaSenhaRecurso(SwaggerView):
 
     definitions = {
-        'RecuperaSenhaEmailUsuarioSchema': RecuperaSenhaEmailUsuarioSchema,
+        "RecuperaSenhaEmailUsuarioSchema": RecuperaSenhaEmailUsuarioSchema,
     }
 
-    @swag_from(f'swagger{os.sep}recuperasenhaemail_put.yml', validation=False)
+    @swag_from(f"swagger{os.sep}recuperasenhaemail_put.yml", validation=False)
     def put(self):
 
         json_dados = request.get_json()
@@ -187,7 +193,7 @@ class UsuarioRecuperaSenhaRecurso(SwaggerView):
         except ValidationError as err:
             return err.messages, 422
 
-        usuario = UsuarioModel.busca_por_email(_email=dados['email'])
+        usuario = UsuarioModel.busca_por_email(_email=dados["email"])
 
         if usuario:
 
@@ -198,7 +204,7 @@ class UsuarioRecuperaSenhaRecurso(SwaggerView):
                     subject="Recuperar senha",
                     sender=os.getenv("MAIL_USERNAME"),
                     recipients=[usuario.email],
-                    body="Clique aqui para recuperar a sua senha"
+                    body="Clique aqui para recuperar a sua senha",
                 )
             try:
                 mail.send(msg)

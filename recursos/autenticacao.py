@@ -13,10 +13,10 @@ auth_schema = AutenticacaoSchema()
 
 class Autenticacao(SwaggerView):
 
-     definitions = {'AutenticacaoSchema': AutenticacaoSchema}
+    definitions = {"AutenticacaoSchema": AutenticacaoSchema}
 
-     @swag_from(f'swagger{os.sep}autenticacao_post.yml', validation=False)
-     def post(self):
+    @swag_from(f"swagger{os.sep}autenticacao_post.yml", validation=False)
+    def post(self):
         json_dados = request.get_json()
         if not json_dados:
             return {"message": "Nenhum dado foi enviado"}, 400

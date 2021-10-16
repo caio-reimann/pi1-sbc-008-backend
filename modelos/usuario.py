@@ -1,6 +1,14 @@
 import re
 
-from marshmallow import Schema, fields, validate, validates, ValidationError, EXCLUDE, validates_schema
+from marshmallow import (
+    Schema,
+    fields,
+    validate,
+    validates,
+    ValidationError,
+    EXCLUDE,
+    validates_schema,
+)
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, or_, and_
 from sqlalchemy.orm import relationship
 
@@ -34,7 +42,8 @@ class UsuarioModel(Base, ModeloBase):
     cep = Column(String(10), nullable=True, comment="CEP")
     info_complementar = Column(Text, comment="Informações complementares")
 
-    clientes = relationship("ClienteModel", back_populates="usuario")
+    orcamentos = relationship("OrcamentoModel", back_populates="usuario")
+    itens_orcamento = relationship("ItemOrcamentoModel", back_populates="usuario")
 
     aceite_termo = Column(
         Boolean,
@@ -99,7 +108,9 @@ class SenhaUsuarioSchema(Schema):
     @validates_schema
     def validate_schema(self, data, **kwargs):
         if data["password"] != data["cpassword"]:
-            raise ValidationError("O campo 'Senha' e 'Confirmar senha' devem ser iguais.")
+            raise ValidationError(
+                "O campo 'Senha' e 'Confirmar senha' devem ser iguais."
+            )
 
 
 class CadastramentoUsuarioSchema(SenhaUsuarioSchema):
@@ -254,6 +265,7 @@ class AlteracaoUsuarioSchema(CadastramentoUsuarioSchema):
         ),
     )
     cep = fields.Str(validate=valida_cep)
+
     info_complementar = fields.Str(
         validate=validate.Length(
             max=300,
