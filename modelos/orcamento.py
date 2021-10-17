@@ -1,3 +1,7 @@
+import datetime
+import math
+from typing import List
+
 from marshmallow import (
     Schema,
     fields,
@@ -16,13 +20,13 @@ from sqlalchemy import (
     or_,
     and_,
     ForeignKey,
-    BigInteger,
+    BigInteger, text,
 )
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, load_only
 
 from bibliotecas.validacoes import valida_telefone, valida_cep
 from db import Base
-from modelos.base_model import ModeloBase
+from modelos.base_model import ModeloBase, OrdemCustomizada, PaginacaoSchema, ResultadoQuerySchema
 
 
 class OrcamentoModel(Base, ModeloBase):
@@ -34,73 +38,17 @@ class OrcamentoModel(Base, ModeloBase):
     email = Column(String(255), comment="Email")
     identidade = Column(String(30), comment="CPF|CNPJ")
 
-    logradouro = fields.Str(
-        validate=validate.Length(
-            max=150,
-            error="O campo 'Logradouro' deve ter no máximo 150 caracteres.",
-        ),
-    )
-    numero = fields.Str(
-        validate=validate.Length(
-            max=20,
-            error="O campo 'Número' deve ter no máximo 20 caracteres.",
-        ),
-    )
-    complemento = fields.Str(
-        validate=validate.Length(
-            max=50,
-            error="O campo 'Complemento' deve ter no máximo 50 caracteres.",
-        ),
-    )
-    bairro = fields.Str(
-        validate=validate.Length(
-            max=100,
-            error="O campo 'Bairro' deve ter no máximo 100 caracteres.",
-        ),
-    )
-    cidade = fields.Str(
-        validate=validate.Length(
-            max=100,
-            error="O campo 'Cidade' deve ter no máximo 100 caracteres.",
-        ),
-    )
-    uf = fields.Str(
-        validate=validate.OneOf(
-            [
-                "AC",
-                "AL",
-                "AP",
-                "AM",
-                "BA",
-                "CE",
-                "DF",
-                "ES",
-                "GO",
-                "MA",
-                "MT",
-                "MS",
-                "MG",
-                "PA",
-                "PB",
-                "PR",
-                "PE",
-                "PI",
-                "RJ",
-                "RN",
-                "RS",
-                "RO",
-                "RR",
-                "SC",
-                "SP",
-                "SE",
-                "TO",
-            ],
-            error="Campo 'Estado': opção de  inválida",
-        ),
-    )
-    cep = fields.Str(validate=valida_cep)
+    logradouro = Column(String(150), nullable=True, comment="Endereço")
+    numero = Column(String(20), nullable=True, comment="Número")
+    complemento = Column(String(50), nullable=True, comment="Complemento")
+    bairro = Column(String(100), nullable=True, comment="Bairro")
+    cidade = Column(String(100), nullable=True, comment="Cidade")
+    uf = Column(String(2), nullable=True, comment="Estado")
+    cep = Column(String(10), nullable=True, comment="CEP")
 
     tel_celular = Column(String(20), nullable=False, comment="Celular")
+
+    data_criacao = Column(DateTime, nullable=True, comment="Data de início", default=datetime.datetime.now())
 
     # Prazos para o término
     data_inicio = Column(DateTime, nullable=True, comment="Data de início")
@@ -129,67 +77,99 @@ class OrcamentoModel(Base, ModeloBase):
     itens_orcamento = relationship("ItemOrcamentoModel", back_populates="orcamento")
 
     @classmethod
-    def busca_por_nome(cls, _id_usuario, _nome: str, _limit: int, _page: int = 1):
+    def busca_por_id_e_usuario(cls, _id_usuario: int, _id: int):
         """
-        Realiza uma busca de Orçamentos com o nome e id_usuario
-        SQL: nome LIKE(%_nome%) AND id_usuario = _id_usuario
-        :param _id_usuario: Filtro de usuário para limitar o acesso aos registros
-        :param _page: Página selecionada para trazer os resultados
-        :param _limit: Quantidade de registros que será selecionados por vez (máximo 20)
-        :param _nome: Nome que será buscado utilizado a expressão SQL LIKE %valor%
+        Busca por 'id' WHERE  id = {id}
+        :param _id_usuario: Id do usuario
+        :param _id: Id a ser buscado
         :return: Object Query
         """
 
-        if _page < 0:
-            _page = 1
+        res = cls.query.filter(and_(cls.id == _id, cls.id_usuario == _id_usuario)).first()
 
-        return cls.query.filter(
-            and_(cls.nome.ilike(f"%{_nome}%", cls.id_usuario == _id_usuario))
-            .limit(_limit)
-            .offset((_page * _limit))
-        )
+        orcamento_visualizacao_schema = OrcamentoVisualizacaoSchema()
+
+        return orcamento_visualizacao_schema.dump(res) if res else None
 
     @classmethod
     def busca_por_nome_ou_identidade(
         cls,
         _id_usuario,
-        _limit: int = 10,
-        _nome: str = "",
-        _identidade: str = "",
-        _page: int = 1,
+        _limite: int = 10,
+        _nome: str = None,
+        _identidade: str = None,
+        _pagina: int = 1,
+        _ordenacoes: List[OrdemCustomizada] = [],
     ):
         """
         Realiza uma busca de Orçamentos com o nome ou identidade, e id_usuario
         SQL: (nome LIKE(%_nome%) OR identidade LIKE(%_identidade%))  AND id_usuario = _id_usuario
         :param _id_usuario: Filtro de usuário para limitar o acesso aos registros
-        :param _page: Página selecionada para trazer os resultados
-        :param _limit: Quantidade de registros que será selecionados por vez (máximo 20)
+        :param _pagina: Página selecionada para trazer os resultados
+        :param _limite: Quantidade de registros que será selecionados por vez (máximo 20)
         :param _identidade: Identidade que será buscada utilizado a expressão SQL LIKE %valor%
         :param _nome: Nome que será buscado utilizado a expressão SQL LIKE %valor%
+        :param _ordenacoes: Adiciona as ordenações no comando SQL
         :return: Object Query
         """
 
-        if _page < 0:
-            _page = 1
-        if _limit > 20 or _limit < 0:
-            _limit = 20
+        if _pagina <= 0:
+            _pagina = 1
+        if _limite > 30 or _limite <= 0:
+            _limite = 10
 
-        return cls.query.filter(
-            (
-                and_(
-                    or_(
-                        cls.nome.ilike(f"%{_nome}%"),
-                        cls.identidade.ilike(f"%{_identidade}%"),
-                    ),
-                    cls.id_usuario == _id_usuario,
+        _query = cls.query
+
+        if _nome:
+            if _identidade:
+                _query = _query.filter(
+                    (
+                        and_(
+                            or_(
+                                cls.nome.ilike(f"%{_nome}%"),
+                                cls.identidade.ilike(f"%{_identidade}%"),
+                            ),
+                            cls.id_usuario == _id_usuario,
+                        )
+                    )
                 )
-            )
-            .limit(_limit)
-            .offset((_page * _limit))
-        )
+            else:
+                _query = _query.filter(and_(cls.nome.ilike(f"%{_nome}%"), cls.id_usuario == _id_usuario,))
+        elif _identidade:
+            _query = _query.filter(and_(cls.identidade.ilike(f"%{_identidade}%"), cls.id_usuario == _id_usuario, ))
 
+        _total_registros = _query.options(load_only(cls.id)).count()
 
-class CadastramentoOrcamentoSchema(Schema):
+        _query_ordenacoes = []
+        for ordenacao in _ordenacoes:
+            _query_ordenacoes.append(ordenacao.gera_texto())
+
+        if len(_query_ordenacoes) > 0:
+            _query = _query.order_by(text(",".join(_query_ordenacoes)))
+
+        res = _query.limit(_limite).offset(((_pagina-1) * _limite) if _pagina > 1 else 0)
+
+        orcamento_visualizacao_schema = OrcamentoVisualizacaoSchema()
+
+        dados = {}
+        dados["orcamentos"] = [_orcamento.retorna_dicionario() for _orcamento in res] if res else []
+        dados["total_registros"] = _total_registros
+        dados["total_paginas"] = math.ceil(_total_registros/_limite)
+        dados["pagina"] = _pagina
+        dados["limite"] = _limite
+
+        orcamento_resultado_query_schema = OrcamentoResultadoQuerySchema()
+
+        return orcamento_resultado_query_schema.dump(dados)
+
+    def retorna_dicionario(self):
+        dados = {}
+        for c in self.__table__.columns:
+            print(c.key, getattr(self, c.key))
+            dados[c.key] = getattr(self, c.key)
+        return dados
+
+class OrcamentoSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
@@ -207,43 +187,50 @@ class CadastramentoOrcamentoSchema(Schema):
 
     email = fields.Str(
         required=False,
+        default=None,
         validate=validate.Email(error="Email inválido"),
         error_messages={"required": "O campo 'Email' é obrigatório"},
     )
 
-    tel_celular = fields.Str(validate=valida_telefone)
+    tel_celular = fields.Str(default=None, validate=valida_telefone)
 
     logradouro = fields.Str(
+        default=None,
         validate=validate.Length(
             max=150,
             error="O campo 'Logradouro' deve ter no máximo 150 caracteres.",
         ),
     )
     numero = fields.Str(
+        default=None,
         validate=validate.Length(
             max=20,
             error="O campo 'Número' deve ter no máximo 20 caracteres.",
         ),
     )
     complemento = fields.Str(
+        default=None,
         validate=validate.Length(
             max=50,
             error="O campo 'Complemento' deve ter no máximo 50 caracteres.",
         ),
     )
     bairro = fields.Str(
+        default=None,
         validate=validate.Length(
             max=100,
             error="O campo 'Bairro' deve ter no máximo 100 caracteres.",
         ),
     )
     cidade = fields.Str(
+        default=None,
         validate=validate.Length(
             max=100,
             error="O campo 'Cidade' deve ter no máximo 100 caracteres.",
         ),
     )
     uf = fields.Str(
+        default=None,
         validate=validate.OneOf(
             [
                 "AC",
@@ -277,7 +264,7 @@ class CadastramentoOrcamentoSchema(Schema):
             error="Campo 'Estado': opção de  inválida",
         ),
     )
-    cep = fields.Str(validate=valida_cep)
+    cep = fields.Str(default=None, validate=valida_cep)
 
     data_inicio = fields.DateTime(
         required=True,
@@ -285,6 +272,7 @@ class CadastramentoOrcamentoSchema(Schema):
         error_messages={"required": "O campo 'Data inínio' é obrigatório"},
     )
     tipo_prazo = fields.String(
+        default=None,
         validate=validate.OneOf(
             ["Horas", "Dias", "Meses"],
             error="O Campo 'Tipo do prazo' deve ser: Horas, Dias ou Meses",
@@ -292,11 +280,13 @@ class CadastramentoOrcamentoSchema(Schema):
         comment="Tipo prazo",
     )
     prazo = fields.Integer(
+        default=None,
         validate=validate.Range(min=1, error="O campo 'Prazo' deve ser maior que 0"),
         comment="Prazo",
     )
 
     descricao = fields.Str(
+        default=None,
         validate=validate.Length(
             max=300,
             error="O campo 'Descrição' deve ter no máximo 300 caracteres.",
@@ -304,6 +294,7 @@ class CadastramentoOrcamentoSchema(Schema):
     )
 
     info_complementar = fields.Str(
+        default=None,
         validate=validate.Length(
             max=300,
             error="O campo 'Informações complementares' deve ter no máximo 300 caracteres.",
@@ -346,3 +337,33 @@ class CadastramentoOrcamentoSchema(Schema):
             raise ValidationError(
                 "Preencha apenas um dos campos: 'Desconto' ou 'Desconto em %'"
             )
+
+
+class OrcamentoVisualizacaoSchema(OrcamentoSchema):
+    class Meta:
+        unknown = EXCLUDE
+
+    id = fields.Integer()
+    data_criacao = fields.DateTime()
+
+
+class OrcamentoGetParamSchema(PaginacaoSchema):
+    id = fields.Integer(
+        required=False,
+        default=0,
+        missing=0,
+    )
+    nome = fields.String(
+        required=False,
+        default=None,
+        missing=None,
+    )
+    identidade = fields.String(
+        required=False,
+        default=None,
+        missing=None,
+    )
+
+
+class OrcamentoResultadoQuerySchema(ResultadoQuerySchema):
+    orcamentos = fields.Nested(OrcamentoVisualizacaoSchema, missing=[], many=True)

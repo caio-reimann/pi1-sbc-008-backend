@@ -1,4 +1,58 @@
+from marshmallow import Schema, INCLUDE, fields, EXCLUDE
+
 from db import Base, db_session
+
+
+class OrdemCustomizada:
+    """
+    Ordem para a query do Crud
+    :param coluna: Coluna da tabela que será filtrada
+    :param tipo: 'C' Crescente (ASC) ou 'D' Decrescente (DESC)
+    """
+
+    def __init__(self, coluna: str, tipo: str):
+        self.coluna = coluna
+        self.tipo = ""
+        if tipo == "C" or tipo == "D":
+            self.tipo = tipo
+        else:
+            raise ValueError("O parâmetro 'tipo' deve ter o valor 'C' ou 'D'")
+
+    def __del__(self):
+        pass
+
+    def gera_texto(self):
+        if self.tipo == "C":
+            return "{} {}".format(self.coluna, "asc")
+        if self.tipo == "D":
+            return "{} {}".format(self.coluna, "desc")
+
+
+class FiltroCustomizado:
+    """
+    Filtro para a query do crud
+    :param coluna: Coluna da tabela que será filtrada
+    :param tipo: método de filtro utilizado '==', "!=", '<>', 'in' ou 'like'
+    :param valor: Valor utilizado no filtro (no caso 'contem', incluir o % antes e ou depois)
+    """
+
+    def __init__(self, coluna: str, tipo: str, valor):
+        self.coluna = coluna
+        self.valor = valor
+        self.tipo = ""
+        if (
+            tipo == "!="
+            or tipo == "=="
+            or tipo == "like"
+            or tipo == "<>"
+            or tipo == "in"
+        ):
+            self.tipo = tipo
+        else:
+            raise ValueError("O parâmetro 'tipo' deve ter o valor '==', '<>', ou 'like")
+
+    def __del__(self):
+        pass
 
 
 class ModeloBase:
@@ -49,3 +103,35 @@ class ModeloBase:
         except Exception as e:
             print(e)
             return False
+
+    def as_dict(self):
+        return {c.key: getattr(self, c.key) for c in self.__table__.columns}
+
+
+class PaginacaoSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    pagina = fields.Integer(
+        required=False,
+        default=1,
+        missing=1,
+    )
+    limite = fields.Integer(
+        required=False,
+        default=10,
+        missing=10,
+    )
+
+
+class ResultadoQuerySchema(PaginacaoSchema):
+    total_registros = fields.Integer(
+        required=False,
+        default=1,
+        missing=1,
+    )
+    total_paginas= fields.Integer(
+        required=False,
+        default=1,
+        missing=1,
+    )

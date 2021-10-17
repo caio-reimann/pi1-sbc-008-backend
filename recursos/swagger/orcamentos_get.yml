@@ -1,0 +1,52 @@
+tags:
+  - Orçamento
+consumes:
+- "application/json"
+produces:
+- "application/json"
+security:
+- bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    schema:
+      type: integer
+    required: false
+    description: Procura pelo id de orçamento específico, desabilitando os parâmetros 'nome' e 'identidade'
+  - in: path
+    name: nome
+    schema:
+      type: string
+    required: false
+    description: Procura pelo termo informado contido no campo 'Nome', podendo ser utilizado junto com o parâmetro 'i'dentidade' (união dos dois parâmetros na busca utilizando 'OR'). <br><b>É obrigatório que o conteúdo esteja codificado utilizando 'urlencode' utf-8</b>
+  - in: path
+    name: identidade
+    schema:
+      type: string
+    required: false
+    description: Procura pelo termo informado contido no campo 'identidade', podendo ser utilizado junto com o parâmetro 'nome' (união dos dois parâmetros na busca utilizando 'OR'). <br><b>É obrigatório que o conteúdo esteja codificado utilizando 'urlencode' utf-8</b>
+  - in: path
+    name: pagina
+    schema:
+      type: integer
+    required: false
+    description: Seleciona a página escolhida para a visualização dos dados
+  - in: path
+    name: limite
+    schema:
+      type: integer
+    required: false
+    description: Limita a quantidade de registros que serão exibidos por página (Máx 30)
+responses:
+  200:
+    description: Retorna o(s) registros encontrados com o limite e página informados e o total de páginas e registros encontrados
+    schema:
+      $ref: "#/definitions/OrcamentoResultadoQuerySchema"
+  500:
+    description: Ocorreu um erro no no Servidor
+    schema:
+      properties:
+        message:
+          type: string
+          description: Mensagem de erro
+          example: "Ocorreu um erro, tente novamente"

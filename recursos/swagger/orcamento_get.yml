@@ -1,0 +1,30 @@
+tags:
+  - Orçamento
+consumes:
+- "application/json"
+produces:
+- "application/json"
+security:
+- bearerAuth: []
+parameters:
+  - in: path
+    name: _id
+    schema:
+      type: integer
+    required: true
+    description: ID do orçamento
+responses:
+  200:
+    description: Retorna o(s) registros encontrados com o limite e página informados e o total de páginas e registros encontrados
+    schema:
+      $ref: "#/definitions/OrcamentoVisualizacaoSchema"
+  404:
+    description: Nenhum orçamento foi encontrado
+  500:
+    description: Ocorreu um erro no no Servidor
+    schema:
+      properties:
+        message:
+          type: string
+          description: Mensagem de erro
+          example: "Ocorreu um erro, tente novamente"

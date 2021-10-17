@@ -1,4 +1,6 @@
 import os
+import datetime
+
 from flask import Flask
 from flasgger import Swagger
 
@@ -13,6 +15,7 @@ class Config:
     DB_MAX_OVERFLOW = 2
 
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+    JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(days=30)
 
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 465

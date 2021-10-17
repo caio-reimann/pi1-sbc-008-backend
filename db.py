@@ -1,3 +1,4 @@
+
 import os
 
 from sqlalchemy import create_engine
@@ -31,7 +32,7 @@ Base.query = db_session.query_property()
 def init_db(bcrypt):
     # Importar todos os modelos para criá-los automaticamente
     from modelos.usuario import UsuarioModel
-    from modelos.orcamentos import OrcamentoModel
+    from modelos.orcamento import OrcamentoModel
     from modelos.itens_orcamento import ItemOrcamentoModel
 
     if os.getenv("DB_INIT") == "1":
@@ -53,6 +54,25 @@ def init_db(bcrypt):
 
         if usuario.salva():
             print("Administrador cadastrado com sucesso")
+
+        import datetime
+
+        orcamento = OrcamentoModel()
+        orcamento.id_usuario = 1
+        orcamento.nome = "Cliente José"
+        orcamento.identidade = "101.742.460-80"
+        orcamento.data_criacao = datetime.datetime.now()
+        orcamento.email = "jose_da_silva@uol.com.br"
+        orcamento.tel_celular= "(11) 98765-4321"
+        orcamento.prazo = "10"
+        orcamento.tipo_prazo = "Dias"
+        orcamento.data_inicio = datetime.datetime.now()
+        orcamento.descricao = "Instalação de fogão elétrico em cozinha planejada"
+        orcamento.info_complementar = "Informar o síndico antes da nossa chegada"
+        orcamento.desconto = 5000
+
+        if orcamento.salva():
+            print("Orçamento de teste cadastrado com sucesso")
 
 
 class unaccent(ReturnTypeFromArgs):
