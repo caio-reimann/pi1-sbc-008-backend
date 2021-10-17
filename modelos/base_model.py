@@ -130,7 +130,7 @@ class ResultadoQuerySchema(PaginacaoSchema):
         default=1,
         missing=1,
     )
-    total_paginas= fields.Integer(
+    total_paginas = fields.Integer(
         required=False,
         default=1,
         missing=1,

@@ -1,4 +1,3 @@
-
 import os
 
 from sqlalchemy import create_engine
@@ -63,7 +62,7 @@ def init_db(bcrypt):
         orcamento.identidade = "101.742.460-80"
         orcamento.data_criacao = datetime.datetime.now()
         orcamento.email = "jose_da_silva@uol.com.br"
-        orcamento.tel_celular= "(11) 98765-4321"
+        orcamento.tel_celular = "(11) 98765-4321"
         orcamento.prazo = "10"
         orcamento.tipo_prazo = "Dias"
         orcamento.data_inicio = datetime.datetime.now()

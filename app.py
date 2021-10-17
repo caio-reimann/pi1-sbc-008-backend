@@ -51,5 +51,6 @@ def page_not_found(e):
     # note that we set the 404 status explicitly
     return {"message": "Ocorreu um erro no Servidor, tente novamente"}, 500
 
+
 if __name__ == "__main__":
     app.run()

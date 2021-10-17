@@ -20,13 +20,19 @@ from sqlalchemy import (
     or_,
     and_,
     ForeignKey,
-    BigInteger, text,
+    BigInteger,
+    text,
 )
 from sqlalchemy.orm import relationship, load_only
 
 from bibliotecas.validacoes import valida_telefone, valida_cep
 from db import Base
-from modelos.base_model import ModeloBase, OrdemCustomizada, PaginacaoSchema, ResultadoQuerySchema
+from modelos.base_model import (
+    ModeloBase,
+    OrdemCustomizada,
+    PaginacaoSchema,
+    ResultadoQuerySchema,
+)
 
 
 class OrcamentoModel(Base, ModeloBase):
@@ -48,7 +54,12 @@ class OrcamentoModel(Base, ModeloBase):
 
     tel_celular = Column(String(20), nullable=False, comment="Celular")
 
-    data_criacao = Column(DateTime, nullable=True, comment="Data de início", default=datetime.datetime.now())
+    data_criacao = Column(
+        DateTime,
+        nullable=True,
+        comment="Data de início",
+        default=datetime.datetime.now(),
+    )
 
     # Prazos para o término
     data_inicio = Column(DateTime, nullable=True, comment="Data de início")
@@ -85,7 +96,9 @@ class OrcamentoModel(Base, ModeloBase):
         :return: Object Query
         """
 
-        res = cls.query.filter(and_(cls.id == _id, cls.id_usuario == _id_usuario)).first()
+        res = cls.query.filter(
+            and_(cls.id == _id, cls.id_usuario == _id_usuario)
+        ).first()
 
         orcamento_visualizacao_schema = OrcamentoVisualizacaoSchema()
 
@@ -134,9 +147,19 @@ class OrcamentoModel(Base, ModeloBase):
                     )
                 )
             else:
-                _query = _query.filter(and_(cls.nome.ilike(f"%{_nome}%"), cls.id_usuario == _id_usuario,))
+                _query = _query.filter(
+                    and_(
+                        cls.nome.ilike(f"%{_nome}%"),
+                        cls.id_usuario == _id_usuario,
+                    )
+                )
         elif _identidade:
-            _query = _query.filter(and_(cls.identidade.ilike(f"%{_identidade}%"), cls.id_usuario == _id_usuario, ))
+            _query = _query.filter(
+                and_(
+                    cls.identidade.ilike(f"%{_identidade}%"),
+                    cls.id_usuario == _id_usuario,
+                )
+            )
 
         _total_registros = _query.options(load_only(cls.id)).count()
 
@@ -147,14 +170,18 @@ class OrcamentoModel(Base, ModeloBase):
         if len(_query_ordenacoes) > 0:
             _query = _query.order_by(text(",".join(_query_ordenacoes)))
 
-        res = _query.limit(_limite).offset(((_pagina-1) * _limite) if _pagina > 1 else 0)
+        res = _query.limit(_limite).offset(
+            ((_pagina - 1) * _limite) if _pagina > 1 else 0
+        )
 
         orcamento_visualizacao_schema = OrcamentoVisualizacaoSchema()
 
         dados = {}
-        dados["orcamentos"] = [_orcamento.retorna_dicionario() for _orcamento in res] if res else []
+        dados["orcamentos"] = (
+            [_orcamento.retorna_dicionario() for _orcamento in res] if res else []
+        )
         dados["total_registros"] = _total_registros
-        dados["total_paginas"] = math.ceil(_total_registros/_limite)
+        dados["total_paginas"] = math.ceil(_total_registros / _limite)
         dados["pagina"] = _pagina
         dados["limite"] = _limite
 
@@ -168,6 +195,7 @@ class OrcamentoModel(Base, ModeloBase):
             print(c.key, getattr(self, c.key))
             dados[c.key] = getattr(self, c.key)
         return dados
+
 
 class OrcamentoSchema(Schema):
     class Meta:

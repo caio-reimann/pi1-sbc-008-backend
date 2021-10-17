@@ -6,8 +6,13 @@ from flask import request
 from flask_jwt_extended import jwt_required, get_jwt
 from marshmallow import ValidationError
 
-from modelos.orcamento import OrcamentoSchema, OrcamentoModel, OrcamentoGetParamSchema, OrcamentoResultadoQuerySchema, \
-    OrcamentoVisualizacaoSchema
+from modelos.orcamento import (
+    OrcamentoSchema,
+    OrcamentoModel,
+    OrcamentoGetParamSchema,
+    OrcamentoResultadoQuerySchema,
+    OrcamentoVisualizacaoSchema,
+)
 
 orcamento_schema = OrcamentoSchema()
 
@@ -101,7 +106,9 @@ class OrcamentoRecurso(SwaggerView):
         claims = get_jwt()
         _id_usuario = claims["id"]
 
-        _orcamento = OrcamentoModel.busca_por_id_e_usuario(_id=_id, _id_usuario=_id_usuario)
+        _orcamento = OrcamentoModel.busca_por_id_e_usuario(
+            _id=_id, _id_usuario=_id_usuario
+        )
 
         return _orcamento, 200 if _orcamento else 404
 
@@ -132,15 +139,18 @@ class OrcamentosRecurso(SwaggerView):
         _orcamentos = []
 
         if dados["id"] > 0:
-            _orcamentos = OrcamentoModel.busca_por_id_e_usuario(_id=dados["id"], _id_usuario=_id_usuario)
+            _orcamentos = OrcamentoModel.busca_por_id_e_usuario(
+                _id=dados["id"], _id_usuario=_id_usuario
+            )
         else:
             _orcamentos = OrcamentoModel.busca_por_nome_ou_identidade(
                 _id_usuario=_id_usuario,
                 _nome=unquote(dados["nome"]) if dados["nome"] else None,
-                _identidade=unquote(dados["identidade"]) if dados["identidade"] else None,
+                _identidade=unquote(dados["identidade"])
+                if dados["identidade"]
+                else None,
                 _pagina=dados["pagina"],
                 _limite=dados["limite"],
             )
 
         return _orcamentos, 200
-
