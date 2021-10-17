@@ -3,10 +3,8 @@ from urllib.parse import unquote
 
 from flasgger import SwaggerView, swag_from
 from flask import request
-from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from flask_jwt_extended import jwt_required, get_jwt
 from marshmallow import ValidationError
-from webargs import fields
-from webargs.flaskparser import parser
 
 from modelos.orcamento import OrcamentoSchema, OrcamentoModel, OrcamentoGetParamSchema, OrcamentoResultadoQuerySchema, \
     OrcamentoVisualizacaoSchema
