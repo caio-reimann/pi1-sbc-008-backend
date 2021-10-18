@@ -10,7 +10,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 
 from db import Base
-from modelos.base_model import ModeloBase
+from modelos.base_model import ModeloBase, PaginacaoSchema
 
 
 class ItemOrcamentoModel(Base, ModeloBase):
@@ -43,44 +43,58 @@ class ItemOrcamentoModel(Base, ModeloBase):
     )
     orcamento = relationship("OrcamentoModel", back_populates="itens_orcamento")
 
+    def retorna_dicionario(self):
+        dados = {}
+        for c in self.__table__.columns:
+            print(c.key, getattr(self, c.key))
+            dados[c.key] = getattr(self, c.key)
+        return dados
+
     @classmethod
-    def busca_por_orcamento(
-        cls, _id_usuario: int, _id_orcamento: int, _limit: int, _page: int = 1
-    ):
+    def busca_por_id_orcamento_e_id_usuario(cls, _id_usuario: int, _id_orcamento: int):
         """
-        Realiza uma busca de Orçamentos com o id_orcamento e id_usuario
+        Realiza uma busca de Itens de um Orçamento com o id_orcamento e id_usuario
         SQL: id_orcamento = _id_orcamento AND id_usuario = _id_usuario
         :param _id_usuario: Filtro de usuário para limitar o acesso aos registros
-        :param _page: Página selecionada para trazer os resultados
-        :param _limit: Quantidade de registros que será selecionados por vez (máximo 20)
-        :param _id_orcamento: ID orçamento que será buscado
+        :param _id_orcamento: ID orçamento dos itens que serão buscados
         :return: Object Query
         """
 
-        if _page < 0:
-            _page = 1
+        res = cls.query.filter(and_(cls.id_orcamento == _id_orcamento, cls.id_usuario == _id_usuario)).all()
+
+        dados = {}
+        dados["itens"] = (
+            [item.retorna_dicionario() for item in res] if res else []
+        )
+        dados["total_registros"] = len(res)
+
+        itens_orcamento_resultado_query_schema = ItemOrcamentoResultadoQuerySchema()
+
+        return itens_orcamento_resultado_query_schema.dump(dados)
+
+    @classmethod
+    def busca_por_id_e_id_usuario(cls, _id_usuario: int, _id: int):
+        """
+        Busca por 'id' e 'id_usuario'
+        SQL WHERE  id = {id} AND id_usuario = {id_usuario}
+        :param _id_usuario: Id do usuario para limitar a busca
+        :param _id: Id do orçamento a ser buscado
+        :return: Object Query
+        """
 
         return cls.query.filter(
-            and_(cls.nome.ilike(f"%{_id_orcamento}%", cls.id_usuario == _id_usuario))
-            .limit(_limit)
-            .offset((_page * _limit))
-        )
+            and_(cls.id == _id, cls.id_usuario == _id_usuario)
+        ).first()
 
 
-class CadastramentoItemOrcamentoSchema(Schema):
+class ItemOrcamentoSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
-    _id_orcamento = fields.Integer(
+    id_orcamento = fields.Integer(
         validate=validate.Range(min=1, error="ID orçamento inválido"),
         required=True,
         comment="ID orçamento",
-    )
-
-    _id_usuario = fields.Integer(
-        validate=validate.Range(min=1, error="ID usuário inválido"),
-        required=True,
-        comment="ID usuário",
     )
 
     descricao = fields.Str(
@@ -111,3 +125,23 @@ class CadastramentoItemOrcamentoSchema(Schema):
         error_messages={"required": "O campo 'Valor' é obrigatório"},
         comment="Valor",
     )
+
+
+class ItemOrcamentoIDSchema(ItemOrcamentoSchema):
+    class Meta:
+        unknown = EXCLUDE
+
+    id = fields.Integer()
+
+
+class ItemOrcamentoGetParamSchema(PaginacaoSchema):
+    id_orcamento = fields.Integer(
+        required=False,
+        default=0,
+        missing=0,
+    )
+
+
+class ItemOrcamentoResultadoQuerySchema(Schema):
+    itens = fields.Nested(ItemOrcamentoIDSchema, missing=[], many=True)
+    total_registros = fields.Integer(missing=0)

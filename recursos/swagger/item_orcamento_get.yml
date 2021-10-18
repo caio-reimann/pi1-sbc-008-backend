@@ -1,5 +1,5 @@
 tags:
-  - Orçamento
+  - Item orçamento
 consumes:
 - "application/json"
 produces:
@@ -12,14 +12,14 @@ parameters:
     schema:
       type: integer
     required: true
-    description: ID do orçamento
+    description: ID item orçamento
 responses:
   200:
     description: Retorna o registro encontrados conforme o ID informado
     schema:
-      $ref: "#/definitions/OrcamentoVisualizacaoSchema"
+      $ref: "#/definitions/ItemOrcamentoVisualizacaoSchema"
   404:
-    description: Nenhum orçamento encontrado
+    description: Nenhum item encontrado
   500:
     description: Ocorreu um erro no no Servidor
     schema:

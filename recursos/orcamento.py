@@ -52,7 +52,8 @@ class OrcamentoRecurso(SwaggerView):
 
         # Salva o objeto no bando de dados
         if orcamento.salva():
-            return {"message": "Orçamento cadastrado com sucesso"}, 201
+            res = OrcamentoVisualizacaoSchema()
+            return res.dump(orcamento.retorna_dicionario()), 201
         else:
             return {"message": "Ocorreu um erro, tente novamente"}, 500
 
@@ -103,7 +104,8 @@ class OrcamentoIDRecurso(SwaggerView):
                 setattr(orcamento, chave, valor)
 
             if orcamento.salva():
-                return {"message": "Orçamento alterado com sucesso"}, 200
+                res = OrcamentoVisualizacaoSchema()
+                return res.dump(orcamento.retorna_dicionario()), 200
             else:
                 return {"message": "Ocorreu um erro, tente novamente"}, 500
         else:

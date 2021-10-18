@@ -17,11 +17,7 @@ responses:
   201:
     description: Cadastro realizado com sucesso
     schema:
-      properties:
-        message:
-          type: string
-          description: Mensagem de retorno
-          example: "Orçamento cadastrado com sucesso"
+      $ref: "#/definitions/OrcamentoVisualizacaoSchema"
   400:
     description: Ocorreu um erro no processamento das informações
     schema:

@@ -172,9 +172,7 @@ class OrcamentoModel(Base, ModeloBase):
 
         res = _query.limit(_limite).offset(
             ((_pagina - 1) * _limite) if _pagina > 1 else 0
-        )
-
-        orcamento_visualizacao_schema = OrcamentoVisualizacaoSchema()
+        ).all()
 
         dados = {}
         dados["orcamentos"] = (

@@ -1,5 +1,5 @@
 tags:
-  - Orçamento
+  - Item orçamento
 consumes:
 - "application/json"
 produces:
@@ -9,15 +9,15 @@ security:
 parameters:
 - in: "body"
   name: "body"
-  description: "Altera um orçamento"
+  description: "Cadastra um item novo"
   required: true
   schema:
-    $ref: "#/definitions/OrcamentoSchema"
+    $ref: "#/definitions/ItemOrcamentoSchema"
 responses:
-  200:
-    description: Alteração realizada com sucesso
+  201:
+    description: Cadastro realizado com sucesso
     schema:
-      $ref: "#/definitions/OrcamentoVisualizacaoSchema"
+      $ref: "#/definitions/ItemOrcamentoIDSchema"
   400:
     description: Ocorreu um erro no processamento das informações
     schema:

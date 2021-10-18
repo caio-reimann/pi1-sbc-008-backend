@@ -1,25 +1,16 @@
 tags:
-  - Orçamento
+  - Item orçamento
 consumes:
 - "application/json"
 produces:
 - "application/json"
 security:
 - bearerAuth: []
-parameters:
-  - in: path
-    name: _id
-    schema:
-      type: integer
-    required: true
-    description: ID do orçamento
 responses:
   200:
-    description: Retorna o registro encontrados conforme o ID informado
+    description: Retorna o(s) registro(s) encontrados
     schema:
-      $ref: "#/definitions/OrcamentoVisualizacaoSchema"
-  404:
-    description: Nenhum orçamento encontrado
+      $ref: "#/definitions/ItemOrcamentoResultadoQuerySchema"
   500:
     description: Ocorreu um erro no no Servidor
     schema:
