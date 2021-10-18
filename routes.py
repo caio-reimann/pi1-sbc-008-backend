@@ -3,7 +3,7 @@ from flask_restful import Api
 
 from recursos.autenticacao import Autenticacao
 from recursos.geral import Inicio
-from recursos.orcamento import OrcamentoRecurso, OrcamentosRecurso
+from recursos.orcamento import OrcamentoRecurso, OrcamentosRecurso, OrcamentoIDRecurso
 from recursos.usuario import (
     UsuarioRecurso,
     UsuarioSenhaRecurso,
@@ -18,5 +18,6 @@ def inicializa_rotas(api: Api):
     api.add_resource(UsuarioRecurso, "/usuario")
     api.add_resource(UsuarioSenhaRecurso, "/alterasenha")
     api.add_resource(UsuarioRecuperaSenhaRecurso, "/recupera-senha")
-    api.add_resource(OrcamentoRecurso, "/orcamento/<int:_id>")
+    api.add_resource(OrcamentoIDRecurso, "/orcamento/<int:_id>")
+    api.add_resource(OrcamentoRecurso, "/orcamento")
     api.add_resource(OrcamentosRecurso, "/orcamentos")
