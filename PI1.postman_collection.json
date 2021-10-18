@@ -71,6 +71,32 @@
 					"response": []
 				},
 				{
+					"name": "​/recupera-senha (Envio email)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"caio.reimann@live.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/recupera-senha",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recupera-senha"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "/usuario",
 					"request": {
 						"auth": {
@@ -92,6 +118,146 @@
 							],
 							"path": [
 								"usuario"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "orcamento",
+			"item": [
+				{
+					"name": "/orcamento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/orcamento/4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orcamento",
+								"4"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/orcamentos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/orcamentos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orcamentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/orcamento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"bairro\": \"Centro\",\r\n  \"cep\": \"09857-587\",\r\n  \"cidade\": \"Osasco\",\r\n  \"complemento\": \"\",\r\n  \"data_inicio\": \"2021-10-18T16:46:45.051Z\",\r\n  \"desconto\": 1000,\r\n  \"desconto_porcentagem\": 0,\r\n  \"descricao\": \"Reforma\",\r\n  \"email\": \"teste@teste.com.br\",\r\n  \"identidade\": \"587.571.050-06\",\r\n  \"info_complementar\": \"\",\r\n  \"logradouro\": \"Rua dos X\",\r\n  \"nome\": \"Maria Rita\",\r\n  \"numero\": \"70\",\r\n  \"prazo\": 120,\r\n  \"tel_celular\": \"(11) 99988-7766\",\r\n  \"tipo_prazo\": \"Horas\",\r\n  \"uf\": \"SP\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/orcamento",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orcamento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/orcamento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"bairro\": \"Planalto\",\r\n  \"cep\": \"09857-000\",\r\n  \"cidade\": \"Santo Adré\",\r\n  \"complemento\": \"\",\r\n  \"data_inicio\": \"2021-10-18T14:46:45.051Z\",\r\n  \"desconto\": 1500,\r\n  \"desconto_porcentagem\": 0,\r\n  \"descricao\": \"Reforma dos tapetes\",\r\n  \"email\": \"teste2@teste2.com.br\",\r\n  \"identidade\": \"587.571.050-06\",\r\n  \"info_complementar\": \"\",\r\n  \"logradouro\": \"Rua dos Y\",\r\n  \"nome\": \"Maria Rita do Carmo\",\r\n  \"numero\": \"76\",\r\n  \"prazo\": 12,\r\n  \"tel_celular\": \"(11) 99988-7755\",\r\n  \"tipo_prazo\": \"Dias\",\r\n  \"uf\": \"MG\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/orcamento/4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orcamento",
+								"4"
 							]
 						}
 					},
