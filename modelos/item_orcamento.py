@@ -9,7 +9,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 
-from db import Base
+from db import Base, db_session
 from modelos.base_model import ModeloBase, PaginacaoSchema
 
 
@@ -37,7 +37,7 @@ class ItemOrcamentoModel(Base, ModeloBase):
         ForeignKey(
             "orcamentos.id",
             onupdate="CASCADE",
-            ondelete="RESTRICT",
+            ondelete="CASCADE",
         ),
         nullable=False,
     )

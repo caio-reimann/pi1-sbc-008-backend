@@ -1,4 +1,5 @@
 from marshmallow import Schema, INCLUDE, fields, EXCLUDE
+from sqlalchemy import and_
 
 from db import Base, db_session
 
@@ -104,8 +105,31 @@ class ModeloBase:
             print(e)
             return False
 
+    @classmethod
+    def remove_por_id_e_id_usuario(cls, _id_usuario: int, _id: int):
+        """
+        Busca por 'id' e 'id_usuario' e remove o registro
+        SQL WHERE  id = {id} AND id_usuario = {id_usuario}
+        :param _id_usuario: Id do usuario para limitar a busca
+        :param _id: Id do registro a ser buscado
+        :return: Object Query
+        """
+        try:
+            registro = cls.query.filter(
+                and_(cls.id == _id, cls.id_usuario == _id_usuario)
+            ).delete()
+            db_session.commit()
+            if registro == 1:
+                return True
+            else:
+                return None
+        except Exception as e:
+            return e
+
     def as_dict(self):
         return {c.key: getattr(self, c.key) for c in self.__table__.columns}
+
+
 
 
 class PaginacaoSchema(Schema):

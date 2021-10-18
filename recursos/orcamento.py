@@ -111,6 +111,22 @@ class OrcamentoIDRecurso(SwaggerView):
         else:
             return {"message": "Orçamento não localizado"}, 404
 
+    @jwt_required()
+    @swag_from(f"swagger{os.sep}orcamento_delete.yml", validation=False)
+    def delete(self, _id):
+
+        claims = get_jwt()
+        id_usuario = claims["id"]
+
+        registro = OrcamentoModel.remove_por_id_e_id_usuario(_id_usuario=id_usuario, _id=_id)
+
+        if registro is True:
+            return
+        elif registro is None:
+            return {"message": "Registro não localizado"}, 404
+        else:
+            return {"message": "Ocorreu um erro ao tentar excluir o registro"}, 500
+
 
 class OrcamentosRecurso(SwaggerView):
 
