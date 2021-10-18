@@ -66,10 +66,11 @@ class UsuarioRecurso(SwaggerView):
         from app import bcrypt
 
         dados["password"] = bcrypt.generate_password_hash(
-            os.environ.get("DB_ADMIN_PASSWORD")
+            dados["password"]
         ).decode("utf-8")
 
         dados.pop("cpassword")
+        dados["active"] = True
 
         usuario = UsuarioModel(**dados)
 

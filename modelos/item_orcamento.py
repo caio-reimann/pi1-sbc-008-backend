@@ -73,17 +73,18 @@ class ItemOrcamentoModel(Base, ModeloBase):
         return itens_orcamento_resultado_query_schema.dump(dados)
 
     @classmethod
-    def busca_por_id_e_id_usuario(cls, _id_usuario: int, _id: int):
+    def busca_por_id_e_id_usuario(cls, _id_usuario: int, _id: int, _id_orcamento: int):
         """
         Busca por 'id' e 'id_usuario'
         SQL WHERE  id = {id} AND id_usuario = {id_usuario}
+        :param _id_orcamento: Id do orçamento do item
         :param _id_usuario: Id do usuario para limitar a busca
         :param _id: Id do orçamento a ser buscado
         :return: Object Query
         """
 
         return cls.query.filter(
-            and_(cls.id == _id, cls.id_usuario == _id_usuario)
+            and_(cls.id == _id, cls.id_usuario == _id_usuario, cls.id_orcamento == _id_orcamento)
         ).first()
 
 

@@ -88,7 +88,7 @@ class OrcamentoModel(Base, ModeloBase):
     itens_orcamento = relationship("ItemOrcamentoModel", back_populates="orcamento")
 
     @classmethod
-    def busca_por_id_e_usuario(cls, _id_usuario: int, _id: int):
+    def busca_por_id_e_id_usuario(cls, _id_usuario: int, _id: int):
         """
         Busca por 'id' WHERE  id = {id}
         :param _id_usuario: Id do usuario
@@ -160,19 +160,21 @@ class OrcamentoModel(Base, ModeloBase):
                     cls.id_usuario == _id_usuario,
                 )
             )
+        else:
+            _query = _query.filter(cls.id_usuario == _id_usuario)
 
         _total_registros = _query.options(load_only(cls.id)).count()
 
         _query_ordenacoes = []
         for ordenacao in _ordenacoes:
-            _query_ordenacoes.append(ordenacao.gera_texto())
+            _query = _query_ordenacoes.append(ordenacao.gera_texto())
 
         if len(_query_ordenacoes) > 0:
             _query = _query.order_by(text(",".join(_query_ordenacoes)))
 
         res = _query.limit(_limite).offset(
             ((_pagina - 1) * _limite) if _pagina > 1 else 0
-        ).all()
+        )
 
         dados = {}
         dados["orcamentos"] = (
@@ -190,7 +192,6 @@ class OrcamentoModel(Base, ModeloBase):
     def retorna_dicionario(self):
         dados = {}
         for c in self.__table__.columns:
-            print(c.key, getattr(self, c.key))
             dados[c.key] = getattr(self, c.key)
         return dados
 
@@ -374,11 +375,6 @@ class OrcamentoVisualizacaoSchema(OrcamentoSchema):
 
 
 class OrcamentoGetParamSchema(PaginacaoSchema):
-    id = fields.Integer(
-        required=False,
-        default=0,
-        missing=0,
-    )
     nome = fields.String(
         required=False,
         default=None,

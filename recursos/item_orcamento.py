@@ -7,6 +7,7 @@ from marshmallow import ValidationError
 
 from modelos.item_orcamento import ItemOrcamentoModel, ItemOrcamentoSchema, ItemOrcamentoGetParamSchema, \
     ItemOrcamentoResultadoQuerySchema, ItemOrcamentoIDSchema
+from modelos.orcamento import OrcamentoModel
 
 item_orcamento_schema = ItemOrcamentoSchema()
 
@@ -39,15 +40,21 @@ class ItemOrcamentoRecurso(SwaggerView):
         # Adiciona o campo id_usuario
         dados["id_usuario"] = id_usuario
 
-        # Instancia um novo Objeto do tipo Orcamento com os dados
-        item_orcamento = ItemOrcamentoModel(**dados)
+        orcamento = OrcamentoModel.busca_por_id_e_id_usuario(_id=dados["id_orcamento"], _id_usuario=dados["id_usuario"])
 
-        # Salva o objeto no bando de dados
-        if item_orcamento.salva():
-            dados["id"] = item_orcamento.id
-            return dados, 201
+        if orcamento:
+
+            # Instancia um novo Objeto do tipo Orcamento com os dados
+            item_orcamento = ItemOrcamentoModel(**dados)
+
+            # Salva o objeto no bando de dados
+            if item_orcamento.salva():
+                dados["id"] = item_orcamento.id
+                return dados, 201
+            else:
+                return {"message": "Ocorreu um erro, tente novamente"}, 500
         else:
-            return {"message": "Ocorreu um erro, tente novamente"}, 500
+            return {"message": "Orçamento não encontrado"}, 404
 
 
 class ItemOrcamentoIDRecurso(SwaggerView):
@@ -86,7 +93,7 @@ class ItemOrcamentoIDRecurso(SwaggerView):
         except ValidationError as err:
             return err.messages, 422
 
-        item_orcamento = ItemOrcamentoModel.busca_por_id_e_id_usuario(_id_usuario=id_usuario, _id=_id)
+        item_orcamento = ItemOrcamentoModel.busca_por_id_e_id_usuario(_id_usuario=id_usuario, _id=_id, _id_orcamento=dados["id_orcamento"])
 
         if item_orcamento:
             for chave, valor in dados.items():
