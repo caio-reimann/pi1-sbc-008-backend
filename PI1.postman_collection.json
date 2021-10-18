@@ -144,13 +144,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/orcamento/4",
+							"raw": "{{url}}/orcamento/2",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"orcamento",
-								"4"
+								"2"
 							],
 							"query": [
 								{
@@ -179,12 +179,18 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/orcamentos",
+							"raw": "{{url}}/orcamentos?nome=José",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"orcamentos"
+							],
+							"query": [
+								{
+									"key": "nome",
+									"value": "José"
+								}
 							]
 						}
 					},
@@ -207,7 +213,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"bairro\": \"Centro\",\r\n  \"cep\": \"09857-587\",\r\n  \"cidade\": \"Osasco\",\r\n  \"complemento\": \"\",\r\n  \"data_inicio\": \"2021-10-18T16:46:45.051Z\",\r\n  \"desconto\": 1000,\r\n  \"desconto_porcentagem\": 0,\r\n  \"descricao\": \"Reforma\",\r\n  \"email\": \"teste@teste.com.br\",\r\n  \"identidade\": \"587.571.050-06\",\r\n  \"info_complementar\": \"\",\r\n  \"logradouro\": \"Rua dos X\",\r\n  \"nome\": \"Maria Rita\",\r\n  \"numero\": \"70\",\r\n  \"prazo\": 120,\r\n  \"tel_celular\": \"(11) 99988-7766\",\r\n  \"tipo_prazo\": \"Horas\",\r\n  \"uf\": \"SP\"\r\n}",
+							"raw": "{\r\n  \"bairro\": \"Centro\",\r\n  \"cep\": \"09857-587\",\r\n  \"cidade\": \"Osasco\",\r\n  \"complemento\": \"\",\r\n  \"data_inicio\": \"2021-10-18T16:46:45.051Z\",\r\n  \"desconto\": 1000,\r\n  \"desconto_porcentagem\": 0,\r\n  \"descricao\": \"Reforma\",\r\n  \"email\": \"teste@teste.com.br\",\r\n  \"identidade\": \"587.571.050-06\",\r\n  \"info_complementar\": \"\",\r\n  \"logradouro\": \"Rua dos X\",\r\n  \"nome\": \"Maria Valão\",\r\n  \"numero\": \"70\",\r\n  \"prazo\": 120,\r\n  \"tel_celular\": \"(11) 99988-7766\",\r\n  \"tipo_prazo\": \"Horas\",\r\n  \"uf\": \"SP\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -243,7 +249,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"bairro\": \"Planalto\",\r\n  \"cep\": \"09857-000\",\r\n  \"cidade\": \"Santo Adré\",\r\n  \"complemento\": \"\",\r\n  \"data_inicio\": \"2021-10-18T14:46:45.051Z\",\r\n  \"desconto\": 1500,\r\n  \"desconto_porcentagem\": 0,\r\n  \"descricao\": \"Reforma dos tapetes\",\r\n  \"email\": \"teste2@teste2.com.br\",\r\n  \"identidade\": \"587.571.050-06\",\r\n  \"info_complementar\": \"\",\r\n  \"logradouro\": \"Rua dos Y\",\r\n  \"nome\": \"Maria Rita do Carmo\",\r\n  \"numero\": \"76\",\r\n  \"prazo\": 12,\r\n  \"tel_celular\": \"(11) 99988-7755\",\r\n  \"tipo_prazo\": \"Dias\",\r\n  \"uf\": \"MG\"\r\n}",
+							"raw": "{\r\n  \"bairro\": \"Planalto\",\r\n  \"cep\": \"09857-000\",\r\n  \"cidade\": \"Santo André\",\r\n  \"complemento\": \"\",\r\n  \"data_inicio\": \"2021-10-18T14:46:45.051Z\",\r\n  \"desconto\": 1500,\r\n  \"desconto_porcentagem\": 0,\r\n  \"descricao\": \"Reforma dos tapetes\",\r\n  \"email\": \"teste2@teste2.com.br\",\r\n  \"identidade\": \"587.571.050-06\",\r\n  \"info_complementar\": \"\",\r\n  \"logradouro\": \"Rua dos Y\",\r\n  \"nome\": \"Maria Rita do Carmo\",\r\n  \"numero\": \"76\",\r\n  \"prazo\": 12,\r\n  \"tel_celular\": \"(11) 99988-7755\",\r\n  \"tipo_prazo\": \"Dias\",\r\n  \"uf\": \"MG\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -258,6 +264,168 @@
 							"path": [
 								"orcamento",
 								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "orcamento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/orcamento/4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orcamento",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "item_orcamento",
+			"item": [
+				{
+					"name": "/item_orcamento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descricao\": \"Costura índica\",\r\n    \"id_orcamento\": 12,\r\n    \"quantidade\": 30,\r\n    \"valor\": 38000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/item_orcamento",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"item_orcamento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/item_orcamento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"descricao\": \"Pintura das partes danificadas\",\r\n  \"id_orcamento\": 1,\r\n  \"quantidade\": 11,\r\n  \"valor\": 18000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/item_orcamento/9",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"item_orcamento",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "itens_orcamento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/itens_orcamento/4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"itens_orcamento",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "itens_orcamento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/item_orcamento/5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"item_orcamento",
+								"5"
 							]
 						}
 					},
