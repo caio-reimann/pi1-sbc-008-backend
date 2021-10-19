@@ -23,6 +23,7 @@ class UsuarioModel(Base, ModeloBase):
     email = Column(String(255), unique=True, nullable=False, comment="Email")
     password = Column(String(255), nullable=False, comment="Senha")
     active = Column(Boolean(), comment="Ativo")
+    token = Column(String(250), comment="Token")
 
     nome = Column(String(30), nullable=False, comment="Nome")
     sobrenome = Column(String(100), unique=False, nullable=False, comment="Sobrenome")
@@ -54,8 +55,19 @@ class UsuarioModel(Base, ModeloBase):
     @classmethod
     def busca_por_email(cls, _email: str):
         """
-        Busca por 'email' WHERE  email = {_email}
-        :param _email: Id a ser buscado
+        Busca por 'email'
+        SQL: WHERE  email = {_email}
+        :param _email: Email a ser buscado
+        :return: Object Query
+        """
+        return cls.query.filter_by(email=_email).first()
+
+    @classmethod
+    def busca_por_token(cls, _token: str):
+        """
+        Busca por 'token'
+        SQL: WHERE  token = {_token}
+        :param _token: Token a ser buscado
         :return: Object Query
         """
         return cls.query.filter_by(email=_email).first()

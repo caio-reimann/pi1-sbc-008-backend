@@ -200,19 +200,48 @@ class UsuarioRecuperaSenhaRecurso(SwaggerView):
 
             from app import mail, app
 
-            with app.app_context():
-                msg = Message(
-                    subject="Recuperar senha",
-                    sender=os.getenv("MAIL_USERNAME"),
-                    recipients=[usuario.email],
-                    body="Clique aqui para recuperar a sua senha",
-                )
-            try:
-                mail.send(msg)
-                return {"message": "Email enviado com sucesso"}, 200
-            except Exception as e:
-                print(e)
-                return {"message": "Ocorreu um erro, tente novamente"}, 500
+            tk = Token(tamanho=8)
+            nova_senha = tk.geraToken()
 
+            from app import bcrypt
+            usuario.password = bcrypt.generate_password_hash(nova_senha).decode("utf-8")
+
+            if usuario.salva():
+                with app.app_context():
+                    msg = Message(
+                        subject="Nova senha",
+                        sender=os.getenv("MAIL_USERNAME"),
+                        recipients=[usuario.email],
+                        html=f"""
+Sua nova senha é:
+<b>{nova_senha}</b>                        
+                        """,
+                    )
+                try:
+                    mail.send(msg)
+                    return {"message": "Email enviado com sucesso"}, 200
+                except Exception as e:
+                    print(e)
+                    return {"message": "Ocorreu um erro, tente novamente"}, 500
+            else:
+                return {"message": "Ocorreu um erro, tente novamente"}, 500
         else:
             return {"message": "Usuário não localizado"}, 404
+
+
+class Token:
+
+    DICIONARIO = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0129456789"
+
+    def __init__(self, tamanho: int = 30):
+        self.tamanho = tamanho
+        self.tamanho_dicionario = len(self.DICIONARIO)
+
+    def geraToken(self) -> str:
+        token = ""
+        for i in range(self.tamanho):
+            import random
+
+            token += self.DICIONARIO[random.randint(0, (self.tamanho_dicionario-1))]
+
+        return token

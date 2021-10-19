@@ -52,5 +52,10 @@ def page_not_found(e):
     return {"message": "Ocorreu um erro no Servidor, tente novamente"}, 500
 
 
+@jwt.expired_token_loader
+def my_expired_token_callback(jwt_header, jwt_payload):
+    return {"message": "Token inválido ou expirado"}, 401
+
+
 if __name__ == "__main__":
     app.run()
