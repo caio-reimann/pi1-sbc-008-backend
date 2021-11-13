@@ -18,6 +18,7 @@ psycopg2 = "*"
 flasgger = "*"
 apispec = "*"
 flask-mail = "*"
+flask-cors = "*"
 
 [dev-packages]
 

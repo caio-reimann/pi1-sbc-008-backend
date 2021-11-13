@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from flask_restful import Api
@@ -12,6 +13,7 @@ from db import db_session, init_db
 from routes import inicializa_rotas
 
 app = Flask(__name__)
+CORS(app)
 
 if app.config["ENV"] == "production":
     app.config.from_object("config.ProductionConfig")
@@ -56,11 +58,6 @@ def page_not_found(e):
 def my_expired_token_callback(jwt_header, jwt_payload):
     return {"message": "Token inválido ou expirado"}, 401
 
-
-@app.after_request
-def add_header(response):
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    return response
 
 
 if __name__ == "__main__":
