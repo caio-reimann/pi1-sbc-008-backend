@@ -13,7 +13,7 @@ from db import db_session, init_db
 from routes import inicializa_rotas
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 if app.config["ENV"] == "production":
     app.config.from_object("config.ProductionConfig")
