@@ -57,5 +57,11 @@ def my_expired_token_callback(jwt_header, jwt_payload):
     return {"message": "Token inválido ou expirado"}, 401
 
 
+@app.after_request
+def add_header(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
+
 if __name__ == "__main__":
     app.run()

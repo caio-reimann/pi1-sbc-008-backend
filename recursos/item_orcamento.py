@@ -20,8 +20,8 @@ class ItemOrcamentoRecurso(SwaggerView):
     }
 
     @jwt_required()
-    @swag_from(f"swagger{os.sep}item_orcamento_put.yml", validation=False)
-    def put(self):
+    @swag_from(f"swagger{os.sep}item_orcamento_post.yml", validation=False)
+    def post(self):
 
         # Recupera os dados do usuário autenticado
         claims = get_jwt()
@@ -78,8 +78,8 @@ class ItemOrcamentoIDRecurso(SwaggerView):
         return _item_orcamento, 200 if _item_orcamento else 404
 
     @jwt_required()
-    @swag_from(f"swagger{os.sep}item_orcamento_post.yml", validation=False)
-    def post(self, _id):
+    @swag_from(f"swagger{os.sep}item_orcamento_put.yml", validation=False)
+    def put(self, _id):
 
         claims = get_jwt()
         id_usuario = claims["id"]

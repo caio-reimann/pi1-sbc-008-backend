@@ -4,24 +4,22 @@ consumes:
 - "application/json"
 produces:
 - "application/json"
-security:
-- bearerAuth: []
 parameters:
 - in: "body"
   name: "body"
-  description: "Atualiza os dados de um usuário cadastrado"
+  description: "Cadastra um usuário novo"
   required: true
   schema:
-    $ref: "#/definitions/AlteracaoUsuarioSchema"
+    $ref: "#/definitions/CadastramentoUsuarioSchema"
 responses:
   201:
-    description: Usuário alterado com sucesso
+    description: Cadastro realizado com sucesso
     schema:
       properties:
         message:
           type: string
           description: Mensagem de retorno
-          example: "Usuário alterado com sucesso"
+          example: "Usuário cadastrado com sucesso"
   400:
     description: Ocorreu um erro no processamento das informações
     schema:
@@ -30,16 +28,6 @@ responses:
           type: string
           description: Mensagem de erro
           example: "Email ou senha inválido(s)"
-
-  404:
-    description: Usuário não encontrado
-    schema:
-      properties:
-        message:
-          type: string
-          description: Mensagem de erro
-          example: "Usuário não localizado"
-
   422:
     description: Corpo inválido e/ou informações fora do padrão (Dicionário com cada campo com erro)
     schema:
@@ -50,12 +38,6 @@ responses:
             type: string
             description: Mensagem de erro
             example: "O campo 'Nome' é obrigatório"
-        sobrenomw:
-          type: array
-          items:
-            type: string
-            description: Mensagem de erro
-            example: "O campo 'Sobrenome' é obrigatório"
   500:
     description: Ocorreu um erro no no Servidor
     schema:

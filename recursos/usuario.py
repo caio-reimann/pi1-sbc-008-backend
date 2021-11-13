@@ -39,8 +39,8 @@ class UsuarioRecurso(SwaggerView):
         "VisualizacaoUsuarioSchema": VisualizacaoUsuarioSchema,
     }
 
-    @swag_from(f"swagger{os.sep}usuario_put.yml", validation=False)
-    def put(self):
+    @swag_from(f"swagger{os.sep}usuario_post.yml", validation=False)
+    def post(self):
         json_dados = request.get_json()
         if not json_dados:
             return {"message": "Nenhum dado foi enviado"}, 400
@@ -80,8 +80,8 @@ class UsuarioRecurso(SwaggerView):
             return {"message": "Ocorreu um erro, tente novamente"}, 500
 
     @jwt_required()
-    @swag_from(f"swagger{os.sep}usuario_post.yml", validation=False)
-    def post(self):
+    @swag_from(f"swagger{os.sep}usuario_put.yml", validation=False)
+    def put(self):
 
         claims = get_jwt()
         print(claims)

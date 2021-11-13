@@ -21,7 +21,7 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -47,7 +47,7 @@
 				{
 					"name": "/usuario",
 					"request": {
-						"method": "PUT",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -209,7 +209,7 @@
 								}
 							]
 						},
-						"method": "PUT",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -245,7 +245,7 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -315,7 +315,7 @@
 								}
 							]
 						},
-						"method": "PUT",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -351,7 +351,7 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -452,7 +452,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"caio.reimann@live.com\",\r\n    \"password\": \"UnivespPI1\"\r\n}",
+					"raw": "{\r\n    \"email\": \"caio.reimann@live.com\",\r\n    \"password\": \"fwkLrqzK\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

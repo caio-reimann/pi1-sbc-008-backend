@@ -9,13 +9,13 @@ security:
 parameters:
 - in: "body"
   name: "body"
-  description: "Cadastra um item novo"
+  description: "Altera um item"
   required: true
   schema:
     $ref: "#/definitions/ItemOrcamentoSchema"
 responses:
-  201:
-    description: Cadastro realizado com sucesso
+  200:
+    description: Alteração realizada com sucesso
     schema:
       $ref: "#/definitions/ItemOrcamentoIDSchema"
   400:
@@ -35,7 +35,7 @@ responses:
           items:
             type: string
             description: Mensagem de erro
-            example: "O campo 'Nome' é obrigatório"
+            example: "O campo 'Descrição' é obrigatório"
   500:
     description: Ocorreu um erro no no Servidor
     schema:

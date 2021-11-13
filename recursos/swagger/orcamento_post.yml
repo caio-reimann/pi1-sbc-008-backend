@@ -9,13 +9,13 @@ security:
 parameters:
 - in: "body"
   name: "body"
-  description: "Altera um orçamento"
+  description: "Cadastra um orçamento novo"
   required: true
   schema:
     $ref: "#/definitions/OrcamentoSchema"
 responses:
-  200:
-    description: Alteração realizada com sucesso
+  201:
+    description: Cadastro realizado com sucesso
     schema:
       $ref: "#/definitions/OrcamentoVisualizacaoSchema"
   400:
